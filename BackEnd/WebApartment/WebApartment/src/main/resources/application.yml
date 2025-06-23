@@ -1,0 +1,55 @@
+server:
+  port: ${PORT:8085}
+  tomcat:
+    max-http-form-post-size: 10000000
+spring:
+#  datasource:
+#    url: jdbc:sqlserver://34.59.38.62:1433;databaseName=ComputerManagement;encrypt=true;trustServerCertificate=true
+#    username: sqlserver
+#    password: 123123zxc
+#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  datasource:
+      url: jdbc:sqlserver://localhost:1433;databaseName=WebApartment;encrypt=true;trustServerCertificate=true
+      username: sa
+      password: 123456
+      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ducthang30082004@gmail.com
+    password: nxxj lejr iova juux
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.SQLServerDialect
+        format_sql: true
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 20MB
+      max-request-size: 50MB
+
+  jmx:
+    enabled: false
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+
+api:
+  prefix: api/v1
+
+jwt:
+  expiration: 604800 #7 days = 60 * 60 * 24 * 7
+  secretKey: xGOnTfLD3SjBwuK6pUYJMynjaJ/rksW/ItheskdThnc=
+
