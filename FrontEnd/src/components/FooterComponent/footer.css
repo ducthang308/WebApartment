@@ -1,0 +1,144 @@
+.footer{
+    width: 100%;
+    background-color: #ffce3f7a;
+    padding:0 200px;
+}
+
+.footer-information{
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #121212;
+    padding-top: 30px;
+}
+
+.footer-about{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.footer-title{
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 16px;
+}
+
+.footer-list{
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.footer-item{
+    font-size: 14px;
+}
+
+.footer-item-link:hover{
+    color: #FF5723;
+}
+
+.list-method{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    justify-content: center;
+    align-items: center;
+}
+
+.item-method {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.item-method-img{
+    width: 50px;
+    height: 50px;
+}
+
+.list-social {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  list-style: none;
+  padding: 10px 0;
+  margin: 0;
+}
+
+.item-social-link {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 22px;
+  text-decoration: none;
+  transition: transform 0.3s ease;
+}
+
+/* Hover scale */
+.item-social-link:hover {
+  transform: scale(1.1);
+}
+
+/* Facebook */
+.item-social:nth-child(1) .item-social-link {
+  background-color: #1877f2;
+  font-size: 20px;
+  padding-top: 2px;
+}
+
+/* Telegram */
+.item-social:nth-child(2) .item-social-link {
+  background-color: #229ED9;
+}
+
+/* Instagram */
+.item-social:nth-child(3) .item-social-link {
+  background: radial-gradient(circle at 30% 107%, 
+    #fdf497 0%, #fdf497 5%, 
+    #fd5949 45%, #d6249f 60%, #285AEB 90%);
+}
+
+/* TikTok */
+.item-social:nth-child(4) .item-social-link {
+  background-color: #000;
+}
+
+/* WhatsApp */
+.item-social:nth-child(5) .item-social-link {
+  background-color: #25D366;
+}
+
+.footer-copyright{
+    padding: 20px 0 30px 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer-text{
+    font-size: 12px;
+    font-weight: 300;
+}
+
+.copyright-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.copyright-logo a:first-child {
+    width: 130px;
+    height: 50px;
+    display: inline-block;
+}
+
+.copyright-logo a:last-child {
+    width: 100px;
+    height: 50px;
+    display: inline-block;
+}
