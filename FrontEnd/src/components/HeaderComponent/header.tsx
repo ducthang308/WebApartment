@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { use } from 'react'
 import Logo from "../../assets/img/logo.png"
 import "./header.css"
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 const items: TabsProps['items'] = [
     {
@@ -45,13 +46,19 @@ const items: TabsProps['items'] = [
 
 
 const header = () => {
+    const navigative = useNavigate();
     return (
         <div className="header">
             <div className="navbar-top">
                 <div className="top-left">
-                    <div className="logo">
+                    <div className="logo" onClick={() => navigative('/')}>
                         <a className="logo-link" href='#'>
-                            <img className="logo-link-img" src={Logo} />
+                            <img    
+                                className="logo-link-img"
+                                src={Logo}
+                                alt="Logo"
+                                style={{ cursor: 'pointer' }} 
+                            />
                         </a>
                     </div>
                     <div className="navbar-filter">
@@ -77,7 +84,7 @@ const header = () => {
                             <i className="fa-solid fa-user-plus"></i>
                             <p className="list-user-item-text">Đăng ký</p>
                         </li>
-                        <li className="list-user-item">
+                        <li className="list-user-item" onClick={() => navigative('/login')} style={{ cursor: 'pointer' }}>
                             <i className="fa-solid fa-right-to-bracket"></i>
                             <p className="list-user-item-text">Đăng nhập</p>
                         </li>
