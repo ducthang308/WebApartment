@@ -2,8 +2,10 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { DatePicker } from 'antd';
-import Header from '../src/components/HeaderComponent/header.tsx';
+import HeaderMain from './components/HeaderComponent/HeaderMain/header.tsx';
+import HeaderMNG from './components/HeaderComponent/HeaderManagement/headerManagement.tsx';
 import Footer from '../src/components/FooterComponent/footer.tsx';
+import Navbar from './pages/ManagementPage/Navbar/navbar.tsx';
 import './Global.css'
 
 function App() {
@@ -11,7 +13,8 @@ function App() {
 
   return (
     <>
-      <Header></Header>
+      <HeaderMain></HeaderMain>
+      <Navbar></Navbar>
       <Footer></Footer>
     </>
   )
