@@ -1,13 +1,14 @@
 .navbar-management {
     width: 265px;
+    height: 15%;
     background-color: #fff;
     padding: 16px 12px;
-    margin: 10px 0;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     border: 1px solid #f0f0f0;
     box-shadow: 2px 0 5px rgba(0, 0, 0, 0.03);
+
 }
 
 .nav-header {
@@ -86,7 +87,7 @@
 }
 
 .custom-ant-menu{
-    padding-bottom: 100px;
+    padding-bottom: 50px;
 }
 
 .custom-ant-menu .ant-menu-item {

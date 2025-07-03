@@ -1,0 +1,21 @@
+.header-listing {
+    display: flex;
+    flex-direction: column;
+    padding: 14px 42px 0 42px;
+    border-top: 1px solid #f0f0f0;
+    box-shadow: 0 5px 5px rgba(0, 0, 0, 0.06);
+}
+
+.title {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.custom-tabs .ant-tabs-nav::before {
+    display: none;
+}
+
+.custom-tabs .ant-tabs-ink-bar {
+    height: 2px;
+    transition: all 0.3s ease;
+}
