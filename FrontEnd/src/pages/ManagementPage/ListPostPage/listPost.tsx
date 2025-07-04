@@ -71,7 +71,7 @@ const ListPost = () => {
         <div className="post-container">
             {/* Input tìm kiếm */}
             <Input
-                className="search-input"
+                className="search-input-post"
                 placeholder="Tìm theo mã tin hoặc tiêu đề"
                 prefix={<SearchOutlined />}
             />

@@ -6,6 +6,7 @@ import HeaderMain from './components/HeaderComponent/HeaderMain/header.tsx';
 import Footer from '../src/components/FooterComponent/footer.tsx';
 import Navbar from './pages/ManagementPage/Navbar/navbar.tsx';
 import Management from "./pages/ManagementPage/managementPage.tsx"
+import ServicePrice from './components/ServicePriceComponent/servicePrice.tsx';
 import './Global.css'
 
 function App() {
@@ -14,7 +15,7 @@ function App() {
   return (
     <>
       <HeaderMain></HeaderMain>
-      <Management></Management>
+      <ServicePrice></ServicePrice>
       <Footer></Footer>
     </>
   )
