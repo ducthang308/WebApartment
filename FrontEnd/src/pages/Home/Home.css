@@ -9,12 +9,12 @@
 .app {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 15px;
+    padding: 150px 15px 15px 15px;
     background-color: #fff;
 }
 
-/* Header */
-.header {
+/*main-content*/
+.main-content {
     height: auto;
     text-align: left;
     margin-bottom: 5px;
@@ -23,12 +23,12 @@
     border-bottom: 1px solid #eee;
 }
 
-.header h1 {
+.main-content h1 {
     font-size: 24px;
     color: #2c3e50;
 }
 
-.header p {
+.main-content p {
     font-size: 16px;
     color: #7f8c8d;
     margin-bottom: 10px;

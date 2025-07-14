@@ -1,0 +1,127 @@
+.topup-layout {
+  margin-top: 150px;
+  display: flex;
+  min-height: 100vh;
+  background-color: #f9f9f9;
+}
+
+.topup-sidebar {
+  width: 265px;
+  background-color: #fff;
+  border-right: 1px solid #eee;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+}
+
+.topup-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+    
+.Title {
+  background-color: #fff;
+  padding: 10px 30px;
+  font-size: 26px;
+  font-weight: bold;
+}
+
+.topup-tabs {
+  display: flex;
+  gap: 24px;
+  padding: 10px 30px;
+  border-bottom: 1px solid #eee;
+  background-color: #fff;
+}
+
+.topup-tabs a {
+  font-weight: 500;
+  color: #444;
+  padding-bottom: 8px;
+  text-decoration: none;
+  transition: all 0.2s;
+}
+
+.topup-tabs a:hover {
+  color: #f6531e;
+}
+
+.topup-tabs a.active {
+  color: #f6531e;
+  border-bottom: 2px solid #f6531e;
+}
+
+.topup-container {
+  max-width: 600px;
+  margin: 30px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.topup-promo-box {
+  background-color: #e6f7ff;
+  padding: 16px;
+  border: 1px solid #91d5ff;
+  border-radius: 6px;
+  margin-bottom: 24px;
+}
+
+.topup-promo-box ul {
+  margin: 8px 0 0;
+  padding-left: 20px;
+}
+
+.topup-card {
+  margin-bottom: 20px;
+}
+
+.topup-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.topup-input {
+  margin-top: 12px;
+}
+
+.topup-info div {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.topup-submit-btn {
+  margin-top: 20px;
+  background-color: #f6531e;
+  border: none;
+  height: 40px;
+  font-weight: bold;
+  color: #fff;
+}
+
+.topup-submit-btn:hover {
+  background-color: #d64417;
+}
+
+.footer {
+  width: 100%;
+  padding: 20px 40px;
+  background-color: #f0f0f0;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+  margin-top: auto;
+}
+
+.topup-input-number {
+  height: 65px;
+  font-size: 18px;
+  padding-top: 10px;
+  width: 100%;
+}
+

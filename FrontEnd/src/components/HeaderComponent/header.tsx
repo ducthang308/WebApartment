@@ -80,7 +80,7 @@ const header = () => {
                             <i className="fa-solid fa-heart"></i>
                             <p className="list-user-item-text">Tin đã thích</p>
                         </li>
-                        <li className="list-user-item">
+                        <li className="list-user-item" onClick={() => navigative('/history')} >
                             <i className="fa-solid fa-user-plus"></i>
                             <p className="list-user-item-text">Đăng ký</p>
                         </li>

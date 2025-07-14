@@ -1,5 +1,6 @@
 import './Home.css'
 import React, {useState} from 'react'
+import Footer from '../../components/FooterComponent/footer.tsx';
 import img1 from "../../assets/img/img1.png"
 import img2 from "../../assets/img/img2.png"
 
@@ -97,8 +98,9 @@ const Home = () => {
         { id: 'all', name: 'Tất cả' },
     ];
 return (
+     <>
     <div className="app">
-        <div className="header">
+        <div className="main-content">
             <h1>Kênh thông tin Phòng Trọ số 1 Đà Nẵng</h1>
             <p>Có 73.513 tin đăng cho thuê</p>
         </div>
@@ -227,8 +229,10 @@ return (
             <button className="page-btn">...</button>
             <button className="page-btn">»»</button>
             <button className="page-btn">Trang sau »</button>
-            </div>
+        </div>
     </div>
+    <Footer />
+   </>
   )
 }
 export default Home;
