@@ -1,5 +1,5 @@
 server:
-  port: ${PORT:8085}
+  port: 8085
   tomcat:
     max-http-form-post-size: 10000000
 spring:
@@ -51,5 +51,5 @@ api:
 
 jwt:
   expiration: 604800 #7 days = 60 * 60 * 24 * 7
-  secretKey: xGOnTfLD3SjBwuK6pUYJMynjaJ/rksW/ItheskdThnc=
+  secretKey: XvUHD0eOVtv/QUI8EDt1xAHjgGBJrM8TLCRzvZtnIgA=
 
