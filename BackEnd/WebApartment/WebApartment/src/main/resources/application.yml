@@ -3,13 +3,8 @@ server:
   tomcat:
     max-http-form-post-size: 10000000
 spring:
-#  datasource:
-#    url: jdbc:sqlserver://34.59.38.62:1433;databaseName=ComputerManagement;encrypt=true;trustServerCertificate=true
-#    username: sqlserver
-#    password: 123123zxc
-#    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   datasource:
-      url: jdbc:sqlserver://localhost:1433;databaseName=WebApartment;encrypt=true;trustServerCertificate=true
+      url: jdbc:sqlserver://localhost\\MSSQLSERVER01:1433;databaseName=WebApartment;encrypt=true;trustServerCertificate=true
       username: sa
       password: 123456
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
@@ -53,3 +48,4 @@ jwt:
   expiration: 604800 #7 days = 60 * 60 * 24 * 7
   secretKey: XvUHD0eOVtv/QUI8EDt1xAHjgGBJrM8TLCRzvZtnIgA=
 
+debug: true

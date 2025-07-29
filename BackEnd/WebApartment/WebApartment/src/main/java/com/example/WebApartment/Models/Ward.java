@@ -1,10 +1,8 @@
 package com.example.WebApartment.Models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.List;
 
 @Entity
@@ -13,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Ward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,8 +23,6 @@ public class Ward {
     @ManyToOne
     @JoinColumn(name = "district_id")
     private District district;
-
-    @OneToMany(mappedBy = "ward")
-    private List<Listing> listings;
+    
 }
 

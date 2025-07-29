@@ -10,9 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class DistrictDTO {
-    @JsonProperty("id")
-    private Long id;
-
     @JsonProperty("district_name")
     private String districtName;
 

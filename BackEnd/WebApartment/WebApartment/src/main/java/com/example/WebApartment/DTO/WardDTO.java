@@ -10,9 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class WardDTO {
-    @JsonProperty("id")
-    private Long id;
-
     @JsonProperty("ward_name")
     private String wardName;
 

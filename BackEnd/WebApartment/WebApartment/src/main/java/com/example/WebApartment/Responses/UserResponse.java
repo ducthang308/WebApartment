@@ -10,7 +10,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class LoginResponse {
+public class UserResponse {
     private Long id;
 
     private String token;
@@ -30,8 +30,8 @@ public class LoginResponse {
     @JsonProperty("status")
     private Boolean status;
 
-    public static LoginResponse fromUser(User user){
-        LoginResponse loginResponse = LoginResponse.builder()
+    public static UserResponse fromUser(User user){
+        UserResponse loginResponse = UserResponse.builder()
                 .id(user.getId())
                 .rolesId(user.getRoles().getId())
                 .phoneNumber(user.getPhone())

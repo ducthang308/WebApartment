@@ -1,10 +1,7 @@
 package com.example.WebApartment.Models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
@@ -14,6 +11,7 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class Province {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +19,4 @@ public class Province {
 
     @Column(name = "province_name", nullable = false)
     private String provinceName;
-
-    @OneToMany(mappedBy = "province")
-    private List<District> districts;
 }

@@ -1,11 +1,10 @@
 package com.example.WebApartment.Models;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "favorite_listings")
@@ -13,6 +12,7 @@ import java.util.Date;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class FavoriteListings {
     @EmbeddedId
     private FavoriteListingsKey id;

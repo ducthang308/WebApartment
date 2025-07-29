@@ -50,6 +50,10 @@ public class User implements UserDetails, OAuth2User {
     @JoinColumn(name = "role_id")
     private Role roles;
 
+    @OneToMany(mappedBy = "user")
+    private List<FavoriteListings> favoriteListings;
+
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<SimpleGrantedAuthority> authorityList = new ArrayList<>();

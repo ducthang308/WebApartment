@@ -1,14 +1,14 @@
 package com.example.WebApartment.Services;
 
+import com.example.WebApartment.DTO.UpdatePassDTO;
 import com.example.WebApartment.DTO.UserDTO;
 import com.example.WebApartment.Exceptions.DataNotFoundException;
-import com.example.WebApartment.Exceptions.PermissonDenyException;
 import com.example.WebApartment.JWT.JwtToken;
 import com.example.WebApartment.Models.Role;
 import com.example.WebApartment.Models.User;
 import com.example.WebApartment.Repositories.RoleRepository;
 import com.example.WebApartment.Repositories.UserRepository;
-import com.example.WebApartment.Responses.LoginResponse;
+import com.example.WebApartment.Responses.UserResponse;
 import com.example.WebApartment.Services.Implements.IUserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -60,7 +60,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public LoginResponse login(String phone, String password) throws Exception {
+    public UserResponse login(String phone, String password) throws Exception {
         Optional<User> users = userRepository.findByPhone(phone);
         if (users.isEmpty()) {
             throw new DataNotFoundException("Invalid phone number or password");
@@ -68,13 +68,19 @@ public class UserService implements IUserService {
 
         User existingUser = users.get();
 
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                phone, password, existingUser.getAuthorities()
-        );
-        // Authenticate with Spring Security
-        authenticationManager.authenticate(authenticationToken);
+        if (!existingUser.getStatus()) {
+            throw new BadCredentialsException("Account is banned!");
+        }
 
-        // Generate token and create response DTO with roleId
+        try {
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(phone, password);
+
+            authenticationManager.authenticate(authenticationToken);
+        } catch (BadCredentialsException e) {
+            throw new BadCredentialsException("Invalid phone number or password");
+        }
+
         Long id = existingUser.getId();
         String token = jwtToken.generationToken(existingUser);
         Long roleId = existingUser.getRoles().getId();
@@ -83,31 +89,44 @@ public class UserService implements IUserService {
         String address = existingUser.getAddress();
         Boolean status = existingUser.getStatus();
 
-        if (!status){
-            throw new BadCredentialsException("Account is banned!");
+        return new UserResponse(id, token, roleId, phone, name, address, status);
+    }
+
+
+    @Override
+    public User updatePass(UpdatePassDTO updatePassDTO, Long id) throws Exception {
+        User existUser = userRepository.findById(id).
+                orElseThrow(()->new DataNotFoundException("Not found userId: "+id));
+        if (!passwordEncoder.matches(updatePassDTO.getPassword(), existUser.getPassword())) {
+            throw new BadCredentialsException("Wrong password");
         }
-        else {
-            return new LoginResponse(id, token, roleId, phone, name, address, status);
-        }
+        String password = updatePassDTO.getNewPass();
+        String encodedPassword = passwordEncoder.encode(password);
+        existUser.setPassword(encodedPassword);
+        return userRepository.save(existUser);
     }
 
     @Override
-    public User updateActive(LoginResponse loginResponse, Long id) throws Exception {
-        return null;
+    public User updateActive(UserResponse userResponse, Long id) throws Exception {
+        User existingUser = userRepository.findById(id)
+                .orElseThrow(()->new DataNotFoundException("User not found"));
+        existingUser.setStatus(userResponse.getStatus());
+        userRepository.save(existingUser);
+        return existingUser;
     }
 
     @Override
     public List<User> getAllUsers() {
-        return List.of();
+        return userRepository.findAll();
     }
 
     @Override
-    public User getUserById(Long id) {
-        return null;
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
     }
 
     @Override
-    public User findUserByPhoneNumber(String phone) {
-        return null;
+    public Optional<User> findUserByPhone(String phone) {
+        return userRepository.findByPhone(phone);
     }
 }
