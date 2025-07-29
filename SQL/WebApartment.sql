@@ -1,7 +1,7 @@
-CREATE DATABASE qlPhongTro;
+CREATE DATABASE WebApartment;
 GO
 
-USE qlPhongTro;
+USE WebApartment;
 GO
 
 -- Bảng Role
