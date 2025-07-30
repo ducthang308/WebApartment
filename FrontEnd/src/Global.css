@@ -15,6 +15,7 @@ html, body {
   display: block;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  position: relative;
 }
 
 img, picture, video, canvas, svg {
