@@ -1,0 +1,31 @@
+.sidebarAdmin {
+  background: #001529 !important;
+  min-height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+}
+
+.sidebarAdmin .logo {
+  color: #fff;
+  text-align: center;
+  padding: 20px 0;
+  font-size: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.ant-menu-dark {
+  background: #001529;
+}
+
+.ant-menu-dark .ant-menu-item {
+  font-size: 15px;
+}
+
+.ant-menu-dark .ant-menu-item-selected {
+  background: #1890ff !important;
+}
+
