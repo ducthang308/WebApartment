@@ -1,7 +1,7 @@
-CREATE DATABASE qlPhongTro;
+CREATE DATABASE WebApartment;
 GO
 
-USE qlPhongTro;
+USE WebApartment;
 GO
 
 -- Bảng Role
@@ -136,95 +136,66 @@ CREATE TABLE Statistic (
     monthly_visits INT
 );
 
-
 INSERT INTO Role (role_name) VALUES
-(N'Người dùng'),
-(N'Chủ trọ'),
+(N'Sales'),
+(N'Owner'),
 (N'Admin');
 
-INSERT INTO Users (full_name, address, phone_number, status, password, facebook_account, google_account, profile_image, role_id)
-VALUES
-(N'Nguyễn Văn A', N'Hà Nội', '0900000001', 1, 'passA', 'fb.com/a', 'gg.com/a', 'img1.jpg', 1),
-(N'Trần Thị B', N'Hồ Chí Minh', '0900000002', 1, 'passB', 'fb.com/b', 'gg.com/b', 'img2.jpg', 2),
-(N'Lê Văn C', N'Đà Nẵng', '0900000003', 1, 'passC', NULL, 'gg.com/c', NULL, 2),
-(N'Phạm Thị D', N'Huế', '0900000004', 0, 'passD', 'fb.com/d', NULL, 'img4.jpg', 3),
-(N'Ngô Văn E', N'Bình Dương', '0900000005', 1, 'passE', NULL, NULL, NULL, 3);
+INSERT INTO Province (province_name)
+VALUES 
+(N'Đà Nẵng');
 
--- Province
-INSERT INTO Province (province_name) VALUES
-(N'Hà Nội'), (N'Hồ Chí Minh'), (N'Đà Nẵng'), (N'Bình Dương'), (N'Hải Phòng');
+INSERT INTO District (province_id, district_name)
+VALUES 
+(1, N'Hải Châu'),
+(1, N'Thanh Khê'),
+(1, N'Sơn Trà'),
+(1, N'Ngũ Hành Sơn'),
+(1, N'Liên Chiểu'),
+(1, N'Cẩm Lệ');
 
--- District
-INSERT INTO District (province_id, district_name) VALUES
-(1, N'Ba Đình'), (1, N'Cầu Giấy'), (2, N'Quận 1'), (3, N'Hải Châu'), (4, N'Thủ Dầu Một');
-
--- Ward
-INSERT INTO Ward (district_id, ward_name) VALUES
-(1, N'Phúc Xá'), (2, N'Dịch Vọng'), (3, N'Bến Nghé'), (4, N'Hòa Thuận'), (5, N'Hiệp Thành');
-
--- Street
-INSERT INTO Street (ward_id, street_name) VALUES
-(1, N'Đội Cấn'), (2, N'Xuân Thủy'), (3, N'Nguyễn Huệ'), (4, N'2/9'), (5, N'Phú Lợi');
-
-INSERT INTO Category (category_name) VALUES
-(N'Phòng trọ'),
-(N'Chung cư mini'),
-(N'Căn hộ dịch vụ'),
-(N'Nhà nguyên căn'),
-(N'Ký túc xá');
-
-INSERT INTO Listing (users_id, street_id, category_id, full_address, price, area_m2, title, description, posted_date, status, contact, form_of_payment)
-VALUES
-(1, 1, 1, N'123 Đội Cấn, Hà Nội', 2500000, 20, N'Phòng đẹp giá rẻ', N'Phòng gần trung tâm', GETDATE(), N'Đang hiển thị', '0900000001', N'Tiền mặt'),
-(2, 2, 2, N'234 Xuân Thủy, Hà Nội', 3500000, 25, N'Chung cư mini', N'Tiện nghi đầy đủ', GETDATE(), N'Đang hiển thị', '0900000002', N'Chuyển khoản'),
-(3, 3, 3, N'89 Nguyễn Huệ, TP HCM', 5000000, 35, N'Căn hộ tiện nghi', N'Ngay trung tâm Q1', GETDATE(), N'Đã ẩn', '0900000003', N'Tiền mặt'),
-(4, 4, 4, N'456 Đường 2/9, Đà Nẵng', 2200000, 18, N'Phòng rẻ ĐN', N'Gần trường ĐH BK', GETDATE(), N'Đang hiển thị', '0900000004', N'Tiền mặt'),
-(5, 5, 5, N'12 Phú Lợi, Bình Dương', 1800000, 15, N'Phòng giá rẻ BD', N'Trong KTX', GETDATE(), N'Đang hiển thị', '0900000005', N'Chuyển khoản');
-
-INSERT INTO Favorite_Listings (users_id, listing_id)
-VALUES
-(1, 2),
-(1, 3),
-(2, 1),
-(3, 4),
-(4, 5);
-
--- Feature
-INSERT INTO Feature (feature_name) VALUES
-(N'Máy lạnh'), (N'Máy giặt'), (N'Thang máy'), (N'Ban công'), (N'Chỗ để xe');
-
--- Listing_Feature
-INSERT INTO Listing_Feature (listing_id, feature_id) VALUES
-(1, 1), (1, 3),
-(2, 2), (2, 4),
-(3, 1), (3, 5),
-(4, 3), (5, 2);
-
-INSERT INTO Listing_Media (listing_id, type, url, thumbnail_url, order_index)
-VALUES
-(1, 'image', 'img1.jpg', NULL, 1),
-(1, 'video', 'video1.mp4', 'thumb1.jpg', 2),
-(2, 'image', 'img2.jpg', NULL, 1),
-(3, 'image', 'img3.jpg', NULL, 1),
-(4, 'image', 'img4.jpg', NULL, 1);
-
--- Payment_Method
-INSERT INTO Payment_Method (name_method, payment_description) VALUES
-(N'Tiền mặt', N'Thanh toán trực tiếp'),
-(N'Chuyển khoản', N'Thanh toán ngân hàng'),
-(N'Momo', N'Ví điện tử'),
-(N'ZaloPay', N'Ví điện tử'),
-(N'Paypal', N'Thanh toán quốc tế');
-
--- Subscription
-INSERT INTO Subscription (users_id, payment_id, start_date, end_date, amount, status)
-VALUES
-(1, 1, '2025-01-01', '2025-12-31', 500000, N'Còn hạn'),
-(2, 2, '2025-02-01', '2025-11-30', 400000, N'Còn hạn'),
-(3, 3, '2025-01-15', '2025-06-30', 300000, N'Hết hạn'),
-(4, 1, '2025-03-01', '2025-12-01', 450000, N'Còn hạn'),
-(5, 4, '2025-05-01', '2025-10-31', 350000, N'Còn hạn');
-
-select * from users
-select * from Favorite_Listings
-select * from Listing
+INSERT INTO Ward (district_id, ward_name)
+VALUES 
+(1, N'Hải Châu 1'),
+(1, N'Hải Châu 2'),
+(1, N'Thạch Thang'),
+(1, N'Thanh Bình'),
+(1, N'Thuận Phước'),
+(1, N'Hòa Thuận Đông'),
+(1, N'Hòa Thuận Tây'),
+(1, N'Nam Dương'),
+(1, N'Phước Ninh'),
+(1, N'Bình Thuận'),
+(1, N'Bình Hiên'),
+(1, N'Hòa Cường Bắc'),
+(1, N'Hòa Cường Nam'),
+(2, N'An Khê'),
+(2, N'Chính Gián'),
+(2, N'Thạc Gián'),
+(2, N'Thanh Khê Đông'),
+(2, N'Thanh Khê Tây'),
+(2, N'Xuân Hà'),
+(2, N'Thanh Khê 1'),
+(2, N'Thanh Khê 2'),
+(2, N'An Khê'),
+(3, N'An Hải Bắc'),
+(3, N'An Hải Đông'),
+(3, N'An Hải Tây'),
+(3, N'Mân Thái'),
+(3, N'Nại Hiên Đông'),
+(3, N'Phước Mỹ'),
+(3, N'Thọ Quang'),
+(4, N'Mỹ An'),
+(4, N'Khuê Mỹ'),
+(4, N'Hòa Hải'),
+(4, N'Hòa Quý'),
+(5, N'Hòa Khánh Nam'),
+(5, N'Hòa Khánh Bắc'),
+(5, N'Hòa Hiệp Bắc'),
+(5, N'Hòa Hiệp Nam'),
+(6, N'Khuê Trung'),
+(6, N'Hòa Thọ Đông'),
+(6, N'Hòa Thọ Tây'),
+(6, N'Hòa An'),
+(6, N'Hòa Phát'),
+(6, N'Hòa Xuân');
