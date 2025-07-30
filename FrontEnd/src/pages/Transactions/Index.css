@@ -1,0 +1,16 @@
+.transactions h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.transactions .filters {
+  background: #fff;
+  padding: 15px;
+  border-radius: 8px;
+  margin-bottom: 15px;
+}
+.ant-table {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+}

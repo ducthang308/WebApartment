@@ -1,0 +1,71 @@
+.container-service-price{
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    padding: 30px;
+    padding-top: 180px;
+}
+
+.service-price{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.service-price-title{
+    font-weight: bold;
+    font-size: 35px;
+}
+
+.title-color thead > tr > th:nth-child(2) {
+  background-color: #f5222d;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.title-color thead > tr > th:nth-child(3) {
+  background-color: #eb2f96;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.title-color thead > tr > th:nth-child(4) {
+  background-color: #fa541c;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.title-color thead > tr > th:nth-child(5) {
+  background-color: #1890ff;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.title-color thead > tr > th:nth-child(6) {
+  background-color: #002766;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Căn giữa toàn bộ ô trong bảng */
+.center-text td,
+.center-text th {
+  text-align: center;
+  vertical-align: middle;
+}
+
+/* Optional: cho icon check/x căn giữa đẹp hơn */
+.center-text td svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.padding-table{
+    padding: 0 40px;
+}

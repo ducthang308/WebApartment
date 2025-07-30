@@ -1,0 +1,16 @@
+h2 {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.ant-btn-primary {
+  border-radius: 6px;
+}
+.ant-table {
+  background: #fff;
+  border-radius: 8px;
+  padding: 10px;
+}
+.ant-modal {
+  top: 40px;
+}
