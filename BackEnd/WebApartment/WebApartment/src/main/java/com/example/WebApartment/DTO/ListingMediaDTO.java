@@ -10,9 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @Builder
 public class ListingMediaDTO {
-    @JsonProperty("id")
-    private Long id;
-
     @JsonProperty("listing_id")
     private Long listingId;
 

@@ -1,5 +1,5 @@
 server:
-  port: 8085
+  port: 8081
   tomcat:
     max-http-form-post-size: 10000000
 spring:
@@ -34,8 +34,8 @@ spring:
   servlet:
     multipart:
       enabled: true
-      max-file-size: 20MB
-      max-request-size: 50MB
+      max-file-size: 100MB
+      max-request-size: 100MB
 
   jmx:
     enabled: false
@@ -44,6 +44,10 @@ logging:
   level:
     org.springframework.web: DEBUG
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+    org:
+      springframework:
+        beans:
+          factory=DEBUG:
 
 api:
   prefix: api/v1
@@ -52,4 +56,10 @@ jwt:
   expiration: 604800 #7 days = 60 * 60 * 24 * 7
   secretKey: XvUHD0eOVtv/QUI8EDt1xAHjgGBJrM8TLCRzvZtnIgA=
 
-debug: true
+cloudinary:
+  cloud-name: de7vukn0u
+  api-key: 749648341948272
+  api-secret: McRmuwPpfPZg6Y93H98kWKcdIjw
+
+
+
