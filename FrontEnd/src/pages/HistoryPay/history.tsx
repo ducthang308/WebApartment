@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./history.css";
 import { Link } from "react-router-dom";
 import Footer from '../../components/FooterComponent/footer.tsx';
@@ -12,48 +12,35 @@ import storeIcon from "../../assets/img/img1.png";
 
 const History = () => {
   const [activeTab, setActiveTab] = useState("recharge");
-  
-  // Dữ liệu mẫu cho lịch sử nạp tiền
-  const depositHistoryData = [
-    {
-      id: 1,
-      status: "Thành công",
-      date: "10/07/2025",
-      amount: 500000,
-      tax: 0,
-      promotion: 50000,
-      received: 550000,
-      transactionCode: "GD123456",
-      method: "MOMO",
-      note: "Nạp lần đầu"
-    },
-    {
-      id: 2,
-      status: "Thành công",
-      date: "09/07/2025",
-      amount: 2000000,
-      tax: 0,
-      promotion: 500000,
-      received: 2500000,
-      transactionCode: "GD123457",
-      method: "Chuyển khoản",
-      note: ""
-    },
-    {
-      id: 3,
-      status: "Đang xử lý",
-      date: "08/07/2025",
-      amount: 1000000,
-      tax: 0,
-      promotion: 200000,
-      received: 1200000,
-      transactionCode: "GD123458",
-      method: "Thẻ quốc tế",
-      note: ""
-    }
-  ];
-  
-  // Dữ liệu mẫu cho lịch sử thanh toán
+  const [depositHistoryData, setDepositHistoryData] = useState([]);  
+  const [loading, setLoading] = useState(true);
+
+  const token = "";
+
+  useEffect(() => {
+    const fetchDepositHistory = async () => {
+      try {
+        const response = await fetch("http://localhost:8085/api/v1/subscription", {
+          headers: {
+            "Authorization": `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        });
+        if (!response.ok) {
+          throw new Error("Lỗi khi fetch dữ liệu");
+        }
+        const data = await response.json();
+        setDepositHistoryData(data);
+      } catch (error) {
+        console.error("Fetch error:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDepositHistory();
+  }, []);
+
   const paymentHistoryData = [
     {
       id: 1,
@@ -93,7 +80,7 @@ const History = () => {
   return (      
     <>
       <div className="main-layout">
-          <Navbar />
+        <Navbar />
         <div className="content-area">
           <main className="history-content">
             <h1>Quản lý giao dịch</h1>
@@ -119,7 +106,6 @@ const History = () => {
               </nav>
               
             <div className="container">
-              
               <div className="history-wrapper">
                 {/* Tab Nạp tiền */}
                 {activeTab === "recharge" && (
@@ -159,38 +145,38 @@ const History = () => {
                 {activeTab === "depositHistory" && (
                   <div className="history-table-container">
                     <h2>Lịch sử nạp tiền</h2>
-                    <div className="table-responsive">
-                      <table className="history-table">
-                        <thead>
-                          <tr>
-                            <th>TRẠNG THÁI</th>
-                            <th>NGÀY NẠP</th>
-                            <th>SỐ TIỀN NẠP</th>
-                            <th>THUẾ</th>
-                            <th>KHUYẾN MÃI</th>
-                            <th>THỰC NHẬN</th>
-                            <th>MÃ GIAO DỊCH</th>
-                            <th>PHƯƠNG THỨC</th>
-                            <th>GHI CHÚ</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {depositHistoryData.map(item => (
-                            <tr key={item.id}>
-                              <td className={item.status === "Thành công" ? "success" : "processing"}>{item.status}</td>
-                              <td>{item.date}</td>
-                              <td>{item.amount.toLocaleString()} VNĐ</td>
-                              <td>{item.tax.toLocaleString()} VNĐ</td>
-                              <td>{item.promotion.toLocaleString()} VNĐ</td>
-                              <td>{item.received.toLocaleString()} VNĐ</td>
-                              <td>{item.transactionCode}</td>
-                              <td>{item.method}</td>
-                              <td>{item.note}</td>
+                    {loading ? (
+                      <p>Đang tải dữ liệu...</p>
+                    ) : (
+                      <div className="table-responsive">
+                        <table className="history-table">
+                          <thead>
+                            <tr>
+                              <th>TRẠNG THÁI</th>
+                              <th>NGÀY NẠP</th>
+                              <th>SỐ TIỀN NẠP</th>
+                              <th>PHƯƠNG THỨC</th>
+                              <th>NGÀY BẮT ĐẦU</th>
+                              <th>NGÀY KẾT THÚC</th>
                             </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </div>
+                          </thead>
+                          <tbody>
+                            {depositHistoryData.map((item: any) => (
+                              <tr key={item.id}>
+                                <td className={item.status === "1" ? "success" : "processing"}>
+                                  {item.status === "1" ? "Thành công" : "Đang xử lý"}
+                                </td>
+                                <td>{item.created_at}</td>
+                                <td>{item.amount.toLocaleString()} VNĐ</td>
+                                <td>{item.payment_name}</td>
+                                <td>{item.start_date}</td>
+                                <td>{item.end_date}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
                   </div>
                 )}
                 

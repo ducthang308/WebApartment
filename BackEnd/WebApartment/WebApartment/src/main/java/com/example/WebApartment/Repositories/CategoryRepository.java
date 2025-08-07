@@ -1,4 +1,8 @@
 package com.example.WebApartment.Repositories;
 
-public interface CategoryRepository {
+import com.example.WebApartment.Models.Category;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface CategoryRepository extends JpaRepository<Category, Long> {
+
 }
