@@ -10,18 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-<<<<<<< HEAD
-    "antd": "^5.26.4",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^7.6.3"
-=======
+    "react-router-dom": "^7.6.3",
     "antd": "^5.26.3",
     "leaflet": "^1.9.4",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
     "react-leaflet": "^5.0.0"
->>>>>>> 35c5437f2a181b6e079343fb042491681019ac5b
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",

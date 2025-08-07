@@ -1,7 +1,9 @@
 package com.example.WebApartment.Controllers;
 
 import com.example.WebApartment.DTO.UpdatePassDTO;
+import com.example.WebApartment.DTO.UpdateUserInformationDTO;
 import com.example.WebApartment.DTO.UserDTO;
+import com.example.WebApartment.Exceptions.DataNotFoundException;
 import com.example.WebApartment.Models.User;
 import com.example.WebApartment.Responses.UserResponse;
 import com.example.WebApartment.Services.UserService;
@@ -92,4 +94,8 @@ public class UserController {
         }
     }
 
+    @PutMapping("/{id}")
+    public ResponseEntity<UpdateUserInformationDTO> updateUser(@PathVariable Long id, @RequestBody UserDTO dto) throws DataNotFoundException {
+        return ResponseEntity.ok(userService.updateUserInformation(id, dto));
+    }
 }

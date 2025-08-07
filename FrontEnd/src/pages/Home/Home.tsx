@@ -125,8 +125,8 @@ return (
                     <h2>Đề xuất</h2>
                     <div className="suggestion-tabs">
                         <div 
-                            className={`tab ${activeTab === 'new' ? 'active' : ''}`}
-                            onClick={() => setActiveTab('new')}
+                            className={`tab ${activeTab === 'proposal' ? 'active' : ''}`}
+                            onClick={() => setActiveTab('proposal')}
                         >
                             Đề xuất
                         </div>

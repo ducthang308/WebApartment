@@ -1,14 +1,13 @@
 package com.example.WebApartment.Controllers;
 
-import com.example.WebApartment.DTO.CategoryDTO;
+import com.example.WebApartment.DTO.RoleDTO;
 import com.example.WebApartment.Exceptions.DataNotFoundException;
-import com.example.WebApartment.Models.Category;
-import com.example.WebApartment.Services.CategoryService;
+import com.example.WebApartment.Models.Role;
+import com.example.WebApartment.Services.Implements.IRoleService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +15,14 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("${api.prefix}/category")
+@RequestMapping("${api.prefix}/role")
 @RequiredArgsConstructor
-public class CategoryController {   
-    private final CategoryService categoryService;
+public class RoleController {
+    private final IRoleService roleService;
 
     @PostMapping("")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> createCategory(@Valid @RequestBody CategoryDTO categoryDTO, BindingResult result) throws DataNotFoundException {
+    public ResponseEntity<?> createRole(@Valid @RequestBody RoleDTO roleDTO, BindingResult result) throws DataNotFoundException {
         if (result.hasErrors()) {
             List<String> errorMessage = result.getFieldErrors()
                     .stream()
@@ -31,27 +30,27 @@ public class CategoryController {
                     .toList();
             return ResponseEntity.badRequest().body(errorMessage);
         }
-        categoryService.createCategory(categoryDTO);
+        roleService.createRole(roleDTO);
         return ResponseEntity.ok("Create successfully");
     }
 
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Category>> getAllCategories() {
-        return ResponseEntity.ok(categoryService.getAllCategories());
+    public ResponseEntity<List<Role>> getAllRoles() {
+        return ResponseEntity.ok(roleService.getAllRoles());
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> updateCategory(@PathVariable Long id, @Valid @RequestBody CategoryDTO categoryDTO) throws DataNotFoundException {
-        categoryService.updateCategory(id, categoryDTO);
+    public ResponseEntity<?> updateRole(@PathVariable Long id, @Valid @RequestBody RoleDTO roleDTO) throws DataNotFoundException {
+        roleService.updateRole(id, roleDTO);
         return ResponseEntity.ok("Update successfully");
     }
 
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<?> deleteCategory(@PathVariable Long id) {
-        categoryService.deleteCategory(id);
+    public ResponseEntity<?> deleteRole(@PathVariable Long id) {
+        roleService.deleteRole(id);
         return ResponseEntity.ok("Delete successfully");
     }
 }

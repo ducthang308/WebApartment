@@ -1,10 +1,6 @@
-<<<<<<< HEAD:FrontEnd/src/components/HeaderComponent/header.tsx
-import React, { use } from 'react'
-import Logo from "../../assets/img/logo.png"
-=======
 import React from 'react'
 import Logo from "../../../assets/img/logo.png"
->>>>>>> 35c5437f2a181b6e079343fb042491681019ac5b:FrontEnd/src/components/HeaderComponent/HeaderMain/header.tsx
+
 import "./header.css"
 import { Tabs } from 'antd';
 import type { TabsProps } from 'antd';
