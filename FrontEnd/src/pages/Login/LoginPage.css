@@ -1,0 +1,193 @@
+.login-wrapper {
+    background-color: #fff4ee;
+    display: flex;
+    justify-content: center;
+    padding: 190px 0;
+    min-height: 80vh;
+}
+
+.login-form {
+    background: white;
+    border-radius: 12px;
+    padding: 40px;
+    width: 550px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.login-tabs {
+    display: flex;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #eee;
+}
+
+.login-tabs span {
+    flex: 1;
+    text-align: center;
+    padding: 12px 0;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    position: relative;
+}
+
+.active-tab {
+    color: #f60;
+    border-bottom: 3px solid #f60;
+}
+
+.inactive-tab {
+    color: #ccc;
+}
+
+.login-form input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+.login-btn {
+    width: 100%;
+    background-color: #f60;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    border-radius: 6px;
+    padding: 12px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.forgot-password {
+    display: block;
+    text-align: left;
+    margin-top: 16px;
+    color: #ff1818;
+    text-decoration: none;
+    font-size: 14px;
+}   
+
+.divider {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 20px 0;
+}
+
+
+.divider::before,
+.divider::after {
+    content: "";
+    flex: 1;
+    border-bottom: 1px solid #ccc;
+}
+
+.divider span {
+    padding: 0 12px;
+    color: #999;
+    font-size: 14px;
+}
+
+.social-login-button {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.social-login-button button {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 12px 0;
+    font-size: 15px;
+    font-weight: 500;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+}
+
+.google-btn {
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.google-btn img {
+    width: 50px;
+    height: 50px;
+}
+
+.facebook-btn {
+    background-color: #ffffff;
+    border: none;
+}
+
+.facebook-btn img {
+    width: 50px;
+    height: 50px;
+}
+
+/* css Register */
+.account-type {
+    display: flex;
+    align-items: center; 
+    gap: 16px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.account-label {
+    min-width: 110px;
+    font-size: 14px;
+    display: flex;
+    align-items: center; 
+    margin-left: 5px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center; 
+    gap: 5px;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+.radio-option input[type="radio"] {
+    margin: 0;              
+    vertical-align: middle;
+    transform: translateY(1px); 
+}
+
+.site-footer {
+    margin-top: 10px;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+    padding: 20px 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.site-footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.site-footer p + p {
+     margin-top: 30px; 
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}

@@ -2,23 +2,32 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import { DatePicker } from 'antd';
-import HeaderMain from './components/HeaderComponent/HeaderMain/header.tsx';
+
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Header from './components/HeaderComponent/HeaderMain/header.tsx';
 import Footer from '../src/components/FooterComponent/footer.tsx';
-import Navbar from './pages/ManagementPage/Navbar/navbar.tsx';
-import Management from "./pages/ManagementPage/managementPage.tsx"
-import ServicePrice from './components/ServicePriceComponent/servicePrice.tsx';
+import Navbar from '../src/components/Navbar/navbar.tsx';
+import LoginPage from './pages/Login/LoginPage.tsx';
+import History from './pages/HistoryPay/history.tsx';
+import Home from './pages/Home/Home.tsx';
+import TopUpPage from './pages/TopUpPages/TopUpPage.tsx';
+import AccountManagement from './pages/AccountManagements/AccountManagement.tsx'; 
+
 import './Global.css'
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <HeaderMain></HeaderMain>
-      <ServicePrice></ServicePrice>
-      <Footer></Footer>
-    </>
-  )
+    <Router>
+      <Header />
+      <Routes>
+        <Route path="/" element={<Home  />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/history" element={<History />} />
+        <Route path="/recharge/:method" element={<TopUpPage />} />
+        <Route path="/AccountManagement" element={<AccountManagement />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App

@@ -1,0 +1,59 @@
+.account-type {
+    display: flex;
+    align-items: center; 
+    gap: 16px;
+    margin-top: 15px;
+    flex-wrap: wrap;
+}
+
+.account-label {
+    min-width: 110px;
+    font-size: 14px;
+    display: flex;
+    align-items: center; 
+    margin-left: 5px;
+}
+
+.radio-group {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+    align-items: center;
+}
+
+.radio-option {
+    display: flex;
+    align-items: center; 
+    gap: 5px;
+    white-space: nowrap;
+    font-size: 16px;
+}
+
+.radio-option input[type="radio"] {
+    margin: 0;              
+    vertical-align: middle;
+    transform: translateY(1px); 
+}
+
+.site-footer {
+    margin-top: 10px;
+    text-align: left;
+    font-size: 14px;
+    color: #555;
+    padding: 20px 10px;
+    border-top: 1px solid #ddd;
+    background-color: #f9f9f9;
+}
+
+.site-footer a {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.site-footer p + p {
+     margin-top: 30px; 
+}
+
+.site-footer a:hover {
+    text-decoration: underline;
+}

@@ -23,8 +23,8 @@ public class Listing {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "ward_id")
-    private Ward ward;
+    @JoinColumn(name = "street_id")
+    private Street street;
 
     @ManyToOne
     @JoinColumn(name = "category_id")

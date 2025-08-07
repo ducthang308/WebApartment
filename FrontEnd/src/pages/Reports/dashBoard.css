@@ -1,0 +1,14 @@
+.dashboard h2 {
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.dashboard .ant-card {
+  border-radius: 8px;
+  text-align: center;
+}
+.dashboard .ant-card h1 {
+  font-size: 32px;
+  color: #1890ff;
+  margin: 0;
+}

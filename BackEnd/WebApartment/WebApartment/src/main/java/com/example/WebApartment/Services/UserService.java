@@ -1,6 +1,7 @@
 package com.example.WebApartment.Services;
 
 import com.example.WebApartment.DTO.UpdatePassDTO;
+import com.example.WebApartment.DTO.UpdateUserInformationDTO;
 import com.example.WebApartment.DTO.UserDTO;
 import com.example.WebApartment.Exceptions.DataNotFoundException;
 import com.example.WebApartment.JWT.JwtToken;
@@ -128,5 +129,33 @@ public class UserService implements IUserService {
     @Override
     public Optional<User> findUserByPhone(String phone) {
         return userRepository.findByPhone(phone);
+    }
+
+    @Override
+    public UpdateUserInformationDTO updateUserInformation(Long id, UserDTO dto) throws DataNotFoundException{
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new DataNotFoundException("User not found with id: " + id));
+
+        if (dto.getFullName() != null) user.setFullName(dto.getFullName());
+        if (dto.getAddress() != null) user.setAddress(dto.getAddress());
+        if (dto.getProfileImage() != null) user.setProfileImage(dto.getProfileImage());
+        if (dto.getStatus() != null) user.setStatus(dto.getStatus());
+        if (dto.getRolesId() != null) {
+            Role role = roleRepository.findById(dto.getRolesId())
+                    .orElseThrow(() -> new DataNotFoundException("Role not found with id: " + dto.getRolesId()));
+            user.setRoles(role);
+        }
+
+        User updated = userRepository.save(user);
+
+        return UpdateUserInformationDTO.builder()
+                .id(updated.getId())
+                .fullName(updated.getFullName())
+                .phone(updated.getPhone())
+                .address(updated.getAddress())
+                .profileImage(updated.getProfileImage())
+                .status(updated.getStatus())
+                .roleName(updated.getRoles().getName())
+                .build();
     }
 }

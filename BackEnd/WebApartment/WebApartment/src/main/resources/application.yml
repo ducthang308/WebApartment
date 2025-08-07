@@ -4,7 +4,11 @@ server:
     max-http-form-post-size: 10000000
 spring:
   datasource:
-      url: jdbc:sqlserver://localhost\\MSSQLSERVER01:1433;databaseName=WebApartment;encrypt=true;trustServerCertificate=true
+#      url: jdbc:sqlserver://localhost\\MSSQLSERVER01:1433;databaseName=WebApartment;encrypt=true;trustServerCertificate=true
+#      username: sa
+#      password: 123456
+#      driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+      url: jdbc:sqlserver://localhost:1433;databaseName=WebApartment;encrypt=true;trustServerCertificate=true
       username: sa
       password: 123456
       driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
