@@ -11,6 +11,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class ListingMedia {
+    public static final int MAXIMUM_IMAGES_PER_PRODUCT = 10;
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
