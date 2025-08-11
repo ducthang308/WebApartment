@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./history.css";
+import "./history";
 import { Link } from "react-router-dom";
 import Footer from '../../components/FooterComponent/footer.tsx';
 import Navbar from "../../components/Navbar/navbar";
@@ -7,12 +7,12 @@ import payooIcon from "../../assets/img/img1.png";
 import momoIcon from "../../assets/img/img1.png";
 import atmIcon from "../../assets/img/img1.png";
 import bankIcon from "../../assets/img/img1.png";
-import visaIcon from "../../assets/img/img1.png"; 
+import visaIcon from "../../assets/img/img1.png";
 import storeIcon from "../../assets/img/img1.png";
 
 const History = () => {
   const [activeTab, setActiveTab] = useState("recharge");
-  const [depositHistoryData, setDepositHistoryData] = useState([]);  
+  const [depositHistoryData, setDepositHistoryData] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const token = "";
@@ -20,7 +20,7 @@ const History = () => {
   useEffect(() => {
     const fetchDepositHistory = async () => {
       try {
-        const response = await fetch("http://localhost:8085/api/v1/subscription", {
+        const response = await fetch("http://localhost:8081/api/v1/subscription", {
           headers: {
             "Authorization": `Bearer ${token}`,
             "Content-Type": "application/json"
@@ -77,34 +77,34 @@ const History = () => {
     }
   ];
 
-  return (      
+  return (
     <>
       <div className="main-layout">
         <Navbar />
         <div className="content-area">
           <main className="history-content">
             <h1>Quản lý giao dịch</h1>
-              <nav className="history-tabs">
-                <button 
-                  className={`tab-btn ${activeTab === "recharge" ? "active" : ""}`}
-                  onClick={() => setActiveTab("recharge")}
-                >
-                  Nạp tiền vào tài khoản
-                </button>
-                <button 
-                  className={`tab-btn ${activeTab === "depositHistory" ? "active" : ""}`}
-                  onClick={() => setActiveTab("depositHistory")}
-                >
-                  Lịch sử nạp tiền
-                </button>
-                <button 
-                  className={`tab-btn ${activeTab === "paymentHistory" ? "active" : ""}`}
-                  onClick={() => setActiveTab("paymentHistory")}
-                >
-                  Lịch sử thanh toán
-                </button>
-              </nav>
-              
+            <nav className="history-tabs">
+              <button
+                className={`tab-btn ${activeTab === "recharge" ? "active" : ""}`}
+                onClick={() => setActiveTab("recharge")}
+              >
+                Nạp tiền vào tài khoản
+              </button>
+              <button
+                className={`tab-btn ${activeTab === "depositHistory" ? "active" : ""}`}
+                onClick={() => setActiveTab("depositHistory")}
+              >
+                Lịch sử nạp tiền
+              </button>
+              <button
+                className={`tab-btn ${activeTab === "paymentHistory" ? "active" : ""}`}
+                onClick={() => setActiveTab("paymentHistory")}
+              >
+                Lịch sử thanh toán
+              </button>
+            </nav>
+
             <div className="container">
               <div className="history-wrapper">
                 {/* Tab Nạp tiền */}
@@ -140,7 +140,7 @@ const History = () => {
                     </section>
                   </>
                 )}
-                
+
                 {/* Tab Lịch sử nạp tiền */}
                 {activeTab === "depositHistory" && (
                   <div className="history-table-container">
@@ -179,7 +179,7 @@ const History = () => {
                     )}
                   </div>
                 )}
-                
+
                 {/* Tab Lịch sử thanh toán */}
                 {activeTab === "paymentHistory" && (
                   <div className="history-table-container">
@@ -217,7 +217,7 @@ const History = () => {
                   </div>
                 )}
               </div>
-            </div> 
+            </div>
             <Footer />
           </main>
         </div>
