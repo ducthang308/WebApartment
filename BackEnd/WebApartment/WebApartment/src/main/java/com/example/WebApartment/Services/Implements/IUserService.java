@@ -16,7 +16,7 @@ public interface IUserService {
     User updatePass(UpdatePassDTO updatePassDTO, Long id) throws Exception;
     User updateActive(UserResponse userResponse, Long id) throws Exception;
     List<User> getAllUsers();
-    Optional<User> getUserById(Long id);
+    Optional<UserDTO> getUserById(Long id);
     Optional<User> findUserByPhone(String phone);
     UpdateUserInformationDTO updateUserInformation(Long id, UserDTO dto) throws DataNotFoundException;
 }

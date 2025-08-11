@@ -122,9 +122,20 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public Optional<UserDTO> getUserById(Long id) {
+        return userRepository.findById(id)
+                .map(user -> UserDTO.builder()
+                        .id(user.getId())
+                        .profileImage(user.getProfileImage())
+                        .fullName(user.getUsername())
+                        .googleAccountId(user.getGoogleAccountId())
+                        .facebookAccountId(user.getFacebookAccountId())
+                        .phone(user.getPhone())
+                        .address(user.getAddress())
+                        .build()
+                );
     }
+
 
     @Override
     public Optional<User> findUserByPhone(String phone) {
