@@ -49,7 +49,6 @@ public class ListingService implements IListingService {
                 .contact(listingDTO.getContact())
                 .formOfPayment(listingDTO.getFormOfPayment())
                 .category(category)
-                .ward(ward)
                 .user(user)
                 .build();
         return listingRepository.save(listing);
@@ -71,7 +70,7 @@ public class ListingService implements IListingService {
 
         return listings.stream().map(listing -> ListingDTO.builder()
                         .usersId(listing.getUser() != null ? listing.getUser().getId() : null)
-                        .wardId(listing.getWard() != null ? listing.getWard().getId() : null)
+
                         .categoryId(listing.getCategory() != null ? listing.getCategory().getId() : null)
                         .fullAddress(listing.getFullAddress())
                         .price(listing.getPrice())
@@ -107,11 +106,11 @@ public class ListingService implements IListingService {
             listing.setUser(user);
         }
 
-        if (listingDTO.getWardId() != null) {
-            Ward ward = wardRepository.findById(listingDTO.getWardId())
-                    .orElseThrow(() -> new Exception("Ward not found with ID: " + listingDTO.getWardId()));
-            listing.setWard(ward);
-        }
+//        if (listingDTO.getWardId() != null) {
+//            Ward ward = wardRepository.findById(listingDTO.getWardId())
+//                    .orElseThrow(() -> new Exception("Ward not found with ID: " + listingDTO.getWardId()));
+//            listing.setWard(ward);
+//        }
 
         if (listingDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(listingDTO.getCategoryId())
