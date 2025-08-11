@@ -28,7 +28,6 @@ public class ListingService implements IListingService {
         Long streetId = listingDTO.getStreetId();
         Long userId = listingDTO.getUsersId();
 
-        // Validate and fetch related entities
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find category with id: " + categoryId));
 
@@ -38,7 +37,6 @@ public class ListingService implements IListingService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: " + userId));
 
-        // Build Listing entity
         Listing listing = Listing.builder()
                 .fullAddress(listingDTO.getFullAddress())
                 .price(listingDTO.getPrice())
@@ -49,7 +47,7 @@ public class ListingService implements IListingService {
                 .contact(listingDTO.getContact())
                 .formOfPayment(listingDTO.getFormOfPayment())
                 .category(category)
-                .street(street)
+
                 .user(user)
                 .build();
         return listingRepository.save(listing);
@@ -71,7 +69,6 @@ public class ListingService implements IListingService {
 
         return listings.stream().map(listing -> ListingDTO.builder()
                         .usersId(listing.getUser() != null ? listing.getUser().getId() : null)
-                        .streetId(listing.getStreet() != null ? listing.getStreet().getId() : null)
                         .categoryId(listing.getCategory() != null ? listing.getCategory().getId() : null)
                         .fullAddress(listing.getFullAddress())
                         .price(listing.getPrice())
@@ -112,6 +109,7 @@ public class ListingService implements IListingService {
                     .orElseThrow(() -> new Exception("Ward not found with ID: " + listingDTO.getStreetId()));
             listing.setStreet(street);
         }
+
 
         if (listingDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(listingDTO.getCategoryId())

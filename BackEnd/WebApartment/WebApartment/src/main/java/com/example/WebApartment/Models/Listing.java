@@ -23,10 +23,6 @@ public class Listing {
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "street_id")
-    private Street street;
-
-    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 

@@ -44,13 +44,6 @@ CREATE TABLE Ward (
     ward_name NVARCHAR(100)
 );
 
--- Bảng Street
-CREATE TABLE Street (
-    id INT PRIMARY KEY IDENTITY(1,1),
-    ward_id INT FOREIGN KEY REFERENCES Ward(id),
-    street_name NVARCHAR(100)
-);
-
 -- Bảng Category
 CREATE TABLE Category (
     id INT PRIMARY KEY IDENTITY(1,1),
@@ -61,7 +54,7 @@ CREATE TABLE Category (
 CREATE TABLE Listing (
     id INT PRIMARY KEY IDENTITY(1,1),
     users_id INT FOREIGN KEY REFERENCES Users(id),
-    street_id INT FOREIGN KEY REFERENCES Street(id),
+    ward_id INT FOREIGN KEY REFERENCES Ward(id),
     category_id INT FOREIGN KEY REFERENCES Category(id),
     full_address NVARCHAR(255),
     price DECIMAL(18,2),
