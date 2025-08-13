@@ -10,6 +10,15 @@ import Video from "../../../assets/img/upload-video.png"
 import { Button } from 'antd';
 import { ArrowRightOutlined } from '@ant-design/icons';
 
+import type { ICategory } from '../../../services/Interface';
+import { GetCategory } from '../../../services/CategoryService';
+import type { IProvince } from '../../../services/Interface';
+import { GetProvince } from '../../../services/ProvinceService';
+import type { IDistrict } from '../../../services/Interface';
+import { GetDistrict } from '../../../services/DistrictService';
+import type { IWard } from '../../../services/Interface';
+import { GetWard } from '../../../services/WardService';
+
 interface UploadedImage {
     id: string;
     file: File;
@@ -29,6 +38,59 @@ const Listing = () => {
     const videoInputRef = useRef<HTMLInputElement | null>(null);
     const [video, setVideo] = useState<{ file: File; url: string } | null>(null);
     const [isUploadingVideo, setIsUploadingVideo] = useState(false);
+
+    const [categories, setCategories] = useState<ICategory[]>([]);
+    const [provinces, setProvinces] = useState<IProvince[]>([]);
+    const [districts, setDistricts] = useState<IDistrict[]>([]);
+    const [wards, setWards] = useState<IWard[]>([]);
+
+    const fetchCategories = async () => {
+        try {
+            const data = await GetCategory();
+            console.log("Categories API:", data);
+            setCategories(data);
+        } catch (err) {
+            console.error("Lỗi khi load category:", err);
+        }
+    };
+
+    const fetchProvinces = async () => {
+        try {
+            const data = await GetProvince();
+            console.log("Provinces API:", data);
+            setProvinces(data);
+        } catch (err) {
+            console.error("Lỗi khi load Province:", err);
+        }
+    };
+
+    const fetchDistricts = async () => {
+        try {
+            const data = await GetDistrict();
+            console.log("Districts API:", data);
+            setDistricts(data);
+        } catch (err) {
+            console.error("Lỗi khi load Districts:", err);
+        }
+    };
+
+    const fetchWards = async () => {
+        try {
+            const data = await GetWard();
+            console.log("Wards API:", data);
+            setWards(data);
+        } catch (err) {
+            console.error("Lỗi khi load Wards:", err);
+        }
+    };
+
+    useEffect(() => {
+        fetchCategories();
+        fetchProvinces();
+        fetchDistricts();
+        fetchWards();
+    }, []);
+
 
     const handleSelectVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -69,8 +131,6 @@ const Listing = () => {
         setImages((prev) => prev.filter((img) => img.id !== id));
     };
 
-
-
     useEffect(() => {
         if (!mapRef.current || mapInstanceRef.current) return;
 
@@ -103,16 +163,15 @@ const Listing = () => {
                         Loại chuyên mục <span className="required">(*)</span>
                     </label>
                     <Select
-                        className="select-listing"
                         placeholder="-- Chọn loại chuyên mục --"
                         style={{ width: '50%' }}
                         size="large"
                         allowClear
-                    >
-                        <Option value="nha-dat">Nhà đất</Option>
-                        <Option value="can-ho">Căn hộ</Option>
-                        <Option value="van-phong">Văn phòng</Option>
-                    </Select>
+                        options={categories.map(c => ({
+                            value: c.id,
+                            label: c.category_name
+                        }))}
+                    />
                 </div>
             </div>
 
@@ -130,11 +189,11 @@ const Listing = () => {
                                 placeholder="-- Chọn tỉnh/thành phố --"
                                 size="large"
                                 allowClear
-                            >
-                                <Option value="nha-dat">Nhà đất</Option>
-                                <Option value="can-ho">Căn hộ</Option>
-                                <Option value="van-phong">Văn phòng</Option>
-                            </Select>
+                                options={provinces.map(p => ({
+                                    value: p.id,
+                                    label: p.provinceName
+                                }))}
+                            />
                         </div>
 
                         <div className="form-group-listing">
@@ -146,11 +205,11 @@ const Listing = () => {
                                 placeholder="-- Chọn phường/xã --"
                                 size="large"
                                 allowClear
-                            >
-                                <Option value="nha-dat">Nhà đất</Option>
-                                <Option value="can-ho">Căn hộ</Option>
-                                <Option value="van-phong">Văn phòng</Option>
-                            </Select>
+                                options={wards?.map(w => ({
+                                    value: w.id,
+                                    label: w.wardName
+                                })) || []}
+                            />
                         </div>
 
                         <div className="form-group-listing">
@@ -174,11 +233,11 @@ const Listing = () => {
                                 placeholder="-- Chọn loại chuyên mục --"
                                 size="large"
                                 allowClear
-                            >
-                                <Option value="nha-dat">Nhà đất</Option>
-                                <Option value="can-ho">Căn hộ</Option>
-                                <Option value="van-phong">Văn phòng</Option>
-                            </Select>
+                                options={districts?.map(d => ({
+                                    value: d.id,
+                                    label: d.districtName
+                                })) || []}
+                            />
                         </div>
 
                         <div className="form-group-listing">

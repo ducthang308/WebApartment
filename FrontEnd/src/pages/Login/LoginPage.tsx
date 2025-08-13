@@ -14,9 +14,7 @@ const LoginPage = () => {
         e.preventDefault();
         try {
             const data = await login(phone, password);
-            console.log('Đăng nhập thành công:', data);
 
-            // Nếu backend trả token
             if (data?.token) {
                 localStorage.setItem('token', data.token);
             }

@@ -14,6 +14,7 @@ import TopUpPage from './pages/TopUpPages/TopUpPage.tsx';
 import AccountManagement from './pages/AccountManagements/AccountManagement.tsx';
 
 import './Global.css'
+import Listing from './pages/ManagementPage/ListingPage/listing.tsx';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         <Route path="/history" element={<History />} />
         <Route path="/recharge/:method" element={<TopUpPage />} />
         <Route path="/AccountManagement" element={<AccountManagement />} />
+        <Route path="/AddListing" element={<Listing />} />
       </Routes>
     </Router>
   );

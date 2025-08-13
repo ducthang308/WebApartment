@@ -32,3 +32,25 @@ export interface IUser {
     phoneNumber: string;
     roles_id: number;
 }
+
+export interface ICategory {
+    id: number;
+    category_name: string;
+}
+
+export interface IProvince {
+    id: number;
+    provinceName: string;
+}
+
+export interface IDistrict {
+    id: number;
+    districtName: string;
+    province: IProvince;
+}
+
+export interface IWard {
+    id: number;
+    wardName: string;
+    district: IDistrict;
+}

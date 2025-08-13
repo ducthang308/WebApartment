@@ -27,8 +27,11 @@ public class CategoryService implements ICategoryService {
     }
 
     @Override
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+        return categoryRepository.findAll()
+                .stream()
+                .map(cat -> new CategoryDTO(cat.getId(), cat.getCategoryName()))
+                .toList();
     }
     @Override
     public Category updateCategory(Long id, CategoryDTO categoryDTO)  throws DataNotFoundException {

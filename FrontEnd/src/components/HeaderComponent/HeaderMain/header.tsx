@@ -54,11 +54,11 @@ const header = () => {
                 <div className="top-left">
                     <div className="logo" onClick={() => navigative('/')}>
                         <a className="logo-link" href='#'>
-                            <img    
+                            <img
                                 className="logo-link-img"
                                 src={Logo}
                                 alt="Logo"
-                                style={{ cursor: 'pointer' }} 
+                                style={{ cursor: 'pointer' }}
                             />
                         </a>
                     </div>
@@ -89,7 +89,7 @@ const header = () => {
                             <i className="fa-solid fa-right-to-bracket"></i>
                             <p className="list-user-item-text">Đăng nhập</p>
                         </li>
-                        <li className="list-user-item list-user-item-button">
+                        <li className="list-user-item list-user-item-button" onClick={() => navigative('/AddListing')} style={{ cursor: 'pointer' }}>
                             <i className="fa-solid fa-pen-to-square"></i>
                             <p className="list-user-item-text">Đăng tin</p>
                         </li>
