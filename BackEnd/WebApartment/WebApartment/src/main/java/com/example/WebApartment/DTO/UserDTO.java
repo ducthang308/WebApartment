@@ -39,12 +39,12 @@ public class UserDTO {
     @JsonProperty("status")
     private Boolean status;
 
-    @JsonProperty("roles_id")
+    @JsonProperty("role_id")
     private Long rolesId;
 
     @JsonProperty("facebook_account")
-    private int facebookAccountId;
+    private String facebookAccountId;
 
     @JsonProperty("google_account")
-    private int googleAccountId;
+    private String googleAccountId;
 }

@@ -8,10 +8,12 @@ import com.example.WebApartment.Repositories.SubscriptionRepository;
 
 import java.text.ParseException;
 import java.util.List;
+import java.util.Optional;
 
 public interface ISubscriptionService {
     Subscription createSubscription(SubscriptionDTO dto) throws DataNotFoundException, ParseException;
     List<SubscriptionResponseDTO> getAllSubscriptions();
+    List<SubscriptionResponseDTO> getSubscriptionsById(Long userId);
     Subscription updateSubscription(Long id, SubscriptionDTO dto) throws DataNotFoundException, ParseException;
     void deleteSubscription(Long id);
 

@@ -15,8 +15,8 @@ public class ListingDTO {
     @JsonProperty("users_id")
     private Long usersId;
 
-    @JsonProperty("street_id")
-    private Long streetId;
+    @JsonProperty("ward_id")
+    private Long wardId;
 
     @JsonProperty("category_id")
     private Long categoryId;

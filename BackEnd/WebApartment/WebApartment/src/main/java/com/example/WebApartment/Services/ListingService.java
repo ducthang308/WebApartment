@@ -19,20 +19,20 @@ public class ListingService implements IListingService {
     private final CategoryRepository categoryRepository;
     private final ListingRepository listingRepository;
     private final ListingMediaRepository listingMediaRepository;
-    private final StreetRepository streetRepository;
+    private final WardRepository wardRepository;
     private final UserRepository userRepository;
 
     @Override
     public Listing createListing(ListingDTO listingDTO) throws Exception {
         Long categoryId = listingDTO.getCategoryId();
-        Long streetId = listingDTO.getStreetId();
+        Long wardId = listingDTO.getWardId();
         Long userId = listingDTO.getUsersId();
 
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find category with id: " + categoryId));
 
-        Street street = streetRepository.findById(streetId)
-                .orElseThrow(() -> new DataNotFoundException("Cannot find ward with id: " + streetId));
+        Ward ward = wardRepository.findById(wardId)
+                .orElseThrow(() -> new DataNotFoundException("Cannot find ward with id: " + wardId));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: " + userId));
@@ -104,10 +104,10 @@ public class ListingService implements IListingService {
             listing.setUser(user);
         }
 
-        if (listingDTO.getStreetId() != null) {
-            Street street = streetRepository.findById(listingDTO.getStreetId())
-                    .orElseThrow(() -> new Exception("Ward not found with ID: " + listingDTO.getStreetId()));
-            listing.setStreet(street);
+        if (listingDTO.getWardId() != null) {
+            Ward ward = wardRepository.findById(listingDTO.getWardId())
+                    .orElseThrow(() -> new Exception("Ward not found with ID: " + listingDTO.getWardId()));
+            listing.setWard(ward);
         }
 
 

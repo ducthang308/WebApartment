@@ -52,7 +52,14 @@ public class UserService implements IUserService {
                 .googleAccountId(userDTO.getGoogleAccountId())
                 .build();
         newUser.setRoles(role);
-        if(userDTO.getFacebookAccountId() == 0 && userDTO.getGoogleAccountId() == 0){
+        if (userDTO.getPassword() != null && !userDTO.getPassword().isEmpty()) {
+            newUser.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+        } else {
+            newUser.setPassword(null); // hoặc random chuỗi mã hóa nếu cần
+        }
+//        userDTO.getFacebookAccountId() == 0 && userDTO.getGoogleAccountId() == 0
+            if((userDTO.getFacebookAccountId() == null || userDTO.getFacebookAccountId().equals("0"))
+                    && (userDTO.getGoogleAccountId() == null || userDTO.getGoogleAccountId().equals("0"))){
             String password = userDTO.getPassword();
             String encodedPassword = passwordEncoder.encode(password);
             newUser.setPassword(encodedPassword);
@@ -125,9 +132,10 @@ public class UserService implements IUserService {
     public Optional<UserDTO> getUserById(Long id) {
         return userRepository.findById(id)
                 .map(user -> UserDTO.builder()
+                        .rolesId(user.getRoles().getId())
                         .id(user.getId())
                         .profileImage(user.getProfileImage())
-                        .fullName(user.getUsername())
+                        .fullName(user.getFullName())
                         .googleAccountId(user.getGoogleAccountId())
                         .facebookAccountId(user.getFacebookAccountId())
                         .phone(user.getPhone())
@@ -148,6 +156,8 @@ public class UserService implements IUserService {
                 .orElseThrow(() -> new DataNotFoundException("User not found with id: " + id));
 
         if (dto.getFullName() != null) user.setFullName(dto.getFullName());
+        if (dto.getPhone() != null) user.setPhone(dto.getPhone());
+        if (dto.getGoogleAccountId() != null) user.setGoogleAccountId(dto.getGoogleAccountId());
         if (dto.getAddress() != null) user.setAddress(dto.getAddress());
         if (dto.getProfileImage() != null) user.setProfileImage(dto.getProfileImage());
         if (dto.getStatus() != null) user.setStatus(dto.getStatus());

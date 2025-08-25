@@ -20,7 +20,9 @@ const LoginPage = () => {
             if (data?.token) {
                 localStorage.setItem('token', data.token);
             }
-
+            if (data?.id) {
+                localStorage.setItem('id', data.id.toString());
+            }
             navigate('/'); // đường dẫn viết thường
         } catch (err: any) {
             console.error('Lỗi đăng nhập:', err);

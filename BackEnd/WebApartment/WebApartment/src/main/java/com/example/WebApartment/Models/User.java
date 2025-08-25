@@ -41,10 +41,10 @@ public class User implements UserDetails, OAuth2User {
     private Boolean status;
 
     @Column(name = "facebook_account")
-    private int facebookAccountId;
+    private String facebookAccountId;
 
     @Column(name = "google_account")
-    private int googleAccountId;
+    private String googleAccountId;
 
     @ManyToOne
     @JoinColumn(name = "role_id")

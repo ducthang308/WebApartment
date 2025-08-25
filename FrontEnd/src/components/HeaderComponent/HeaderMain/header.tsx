@@ -52,7 +52,7 @@ const header = () => {
         <div className="header">
             <div className="navbar-top">
                 <div className="top-left">
-                    <div className="logo" onClick={() => navigative('/')}>
+                    <div className="logo" onClick={() => navigative('/Home ')}>
                         <a className="logo-link" href='#'>
                             <img    
                                 className="logo-link-img"
@@ -81,7 +81,7 @@ const header = () => {
                             <i className="fa-solid fa-heart"></i>
                             <p className="list-user-item-text">Tin đã thích</p>
                         </li>
-                        <li className="list-user-item" onClick={() => navigative('/history')} >
+                        <li className="list-user-item" onClick={() => navigative('/register')} >
                             <i className="fa-solid fa-user-plus"></i>
                             <p className="list-user-item-text">Đăng ký</p>
                         </li>

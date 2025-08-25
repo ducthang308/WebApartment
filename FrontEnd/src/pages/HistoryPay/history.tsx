@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
-import "./history";
-import { Link } from "react-router-dom";
+import "./history.css";
+import { data, Link } from "react-router-dom";
 import Footer from '../../components/FooterComponent/footer.tsx';
 import Navbar from "../../components/Navbar/navbar";
 import payooIcon from "../../assets/img/img1.png";
@@ -9,36 +9,32 @@ import atmIcon from "../../assets/img/img1.png";
 import bankIcon from "../../assets/img/img1.png";
 import visaIcon from "../../assets/img/img1.png";
 import storeIcon from "../../assets/img/img1.png";
+import { getDepositHistory } from "../../services/historyService.ts";
 
 const History = () => {
   const [activeTab, setActiveTab] = useState("recharge");
-  const [depositHistoryData, setDepositHistoryData] = useState([]);
+  const [depositHistoryData, setDepositHistoryData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
-  const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbIlJPTEVfQWRtaW4iXSwiUGhvbmUgTnVtYmVyIjoiMDMyNTA0MzU5MCIsInN1YiI6IjAzMjUwNDM1OTAiLCJleHAiOjE3NTU1MjMxNzh9.srXVizg1FnJk5oDHMm-ADfj2dY3iwGCBzfRo7a2ofXc";
-  
+  const fetchDepositHistory = async () => {
+    setLoading(true);
+    try {
+      const token = localStorage.getItem("token") || "";
+      const userId = Number(localStorage.getItem("id") || 0); 
+      const history = await getDepositHistory(token, userId);
+      console.log("Lịch sử nạp tiền:", history);
+      history.forEach(item => {
+        console.log(item);
+      });
+      setDepositHistoryData(history);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDepositHistory = async () => {
-      try {
-        const response = await fetch("http://localhost:8081/api/v1/subscription", {
-          headers: {
-            "Authorization": `Bearer ${token}`,
-            "Content-Type": "application/json"
-          }
-        });
-        if (!response.ok) {
-          throw new Error("Lỗi khi fetch dữ liệu");
-        }
-        const data = await response.json();
-        setDepositHistoryData(data);
-      } catch (error) {
-        console.error("Fetch error:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchDepositHistory();
   }, []);
 
@@ -163,7 +159,7 @@ const History = () => {
                           </thead>
                           <tbody>
                             {depositHistoryData.map((item: any) => (
-                              <tr key={item.id}>
+                              <tr key={item.id || item.Mat}>
                                 <td className={item.status === "1" ? "success" : "processing"}>
                                   {item.status === "1" ? "Thành công" : "Đang xử lý"}
                                 </td>

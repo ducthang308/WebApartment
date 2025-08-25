@@ -16,7 +16,9 @@ import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -64,6 +66,23 @@ public class SubscriptionService implements ISubscriptionService {
                 .toList();
     }
 
+    @Override
+    public List<SubscriptionResponseDTO> getSubscriptionsById(Long userId){
+        return subscriptionRepository.findByUserId(userId)
+                .stream()
+                .map( subscription -> SubscriptionResponseDTO.builder()
+                        .id(subscription.getId())
+                        .usersId(subscription.getUser().getId())
+                        .paymentName(subscription.getPaymentMethod().getNameMethod())
+                        .paymentId(subscription.getPaymentMethod().getId())
+                        .startDate(sdf.format(subscription.getStartDate()))
+                        .endDate(sdf.format(subscription.getEndDate()))
+                        .amount(subscription.getAmount())
+                        .status(subscription.getStatus())
+                        .createdAt(sdf.format(subscription.getCreatedAt()))
+                        .build()
+                ).toList();
+    }
     @Override
     public Subscription updateSubscription(Long id, SubscriptionDTO dto) throws DataNotFoundException, ParseException {
         Subscription subscription = subscriptionRepository.findById(id)

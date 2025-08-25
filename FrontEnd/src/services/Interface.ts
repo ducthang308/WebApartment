@@ -32,3 +32,13 @@ export interface IUser {
     phoneNumber: string;
     roles_id: number;
 }
+
+export interface DepositHistoryItem {
+  id: number;
+  status: string;
+  created_at: string;
+  amount: number;
+  payment_name: string;
+  start_date: string;
+  end_date: string;
+}

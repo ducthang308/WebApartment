@@ -42,6 +42,13 @@ public class SubscriptionController {
         return ResponseEntity.ok(subscriptionService.getAllSubscriptions());
     }
 
+    @GetMapping("/{userId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<SubscriptionResponseDTO>> getSubscriptionsById(@PathVariable Long userId) {
+        subscriptionService.getSubscriptionsById(userId);
+        return ResponseEntity.ok(subscriptionService.getSubscriptionsById(userId));
+    }
+
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<?> updateSubscription(@PathVariable Long id, @Valid @RequestBody SubscriptionDTO dto) throws DataNotFoundException, ParseException {

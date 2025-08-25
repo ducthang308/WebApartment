@@ -1,8 +1,9 @@
 .main-layout {
   display: flex;
   align-items: flex-start;
-  padding-top: 150px;
+  padding-top: 10px;
 }
+/* padding top 150 */
 .footer{
     padding:0px 100px;
     margin-top: 20px;

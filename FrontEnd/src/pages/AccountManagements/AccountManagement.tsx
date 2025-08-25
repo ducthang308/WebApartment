@@ -2,69 +2,129 @@ import React, { useState, useEffect } from "react";
 import "./AccountManagement.css";
 import Navbar from "../../components/Navbar/navbar";
 import Footer from "../../components/FooterComponent/footer";
+import { getUserById,  uploadUserAvatar } from "../../services/UserService";
+import { updatePassword } from "../../services/UserService";
+import { updateUserInformation } from "../../services/UserService";
 
 const AccountManagement = () => {
+  const [oldPassword, setOldPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [activeTab, setActiveTab] = useState("profile");
+
   const [userData, setUserData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
 
-  const token = "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjpbIlJPTEVfQWRtaW4iXSwiUGhvbmUgTnVtYmVyIjoiMDMyNTA0MzU5MCIsInN1YiI6IjAzMjUwNDM1OTAiLCJleHAiOjE3NTU1MjMxNzh9.srXVizg1FnJk5oDHMm-ADfj2dY3iwGCBzfRo7a2ofXc";
+  const [editingName, setEditingName] = useState(false);
+  const [newName, setNewName] = useState("");
 
-  const API_BASE_URL = "http://localhost:8081";
+  const [newPhone, setNewPhone] = useState("");
+
+  const [newEmail, setEditingEmail] = useState();
+
+  const token = localStorage.getItem("token") || "";
+  const userId = Number(localStorage.getItem("id") || 0); 
+  console.log("UserId:", userId);
+  console.log("UserId:", token);
 
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/api/v1/user/1`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (!response.ok) throw new Error(await response.text());
-      const data = await response.json();
-      console.log("User data:", data);
+      const data = await getUserById(userId, token);
       setUserData(data);
       setAvatarPreview(data.avatarUrl || null);
-    } catch (error) {
-      console.error("Fetch error:", error);
+      } catch(error) {
+        console.error("Fetch user error: ", error);
+      } finally{
+        setLoading(false);
+      }
+  };
+
+  useEffect(() => {
+    if (token) fetchUserData();
+  }, [token]);
+
+// cập nhật avatar
+  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) =>{
+    const file = e.target.files?.[0];
+    if(file){
+      const preview = URL.createObjectURL(file);
+      setAvatarPreview(preview);
+
+      const formData = { profile_image: preview };
+      handleUpdate(formData);
+    }
+  }
+// Call api updateUserInformation
+ const handleUpdate = async (payload: any) => {
+    try {
+      setLoading(true);
+      const res = await updateUserInformation(token, userId, payload);
+      console.log("Cập nhật thành công:", res);
+
+      // Cập nhật lại state để hiển thị ngay
+      setUserData((prev: any) => ({ ...prev, ...payload }));
+
+      alert("Cập nhật thông tin thành công!");
+    } catch (err: any) {
+      alert(`${err.message}`);
     } finally {
       setLoading(false);
     }
   };
 
-  useEffect(() => {
-    fetchUserData();
-  }, [token]);
-
-  const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files && e.target.files.length > 0) {
-      uploadAvatar(e.target.files[0]);
+// Cập nhật tên
+  const handleNameUpdate = () => {
+    if (!newName.trim()) {
+      alert("Tên không được để trống!");
+      return;
     }
+    handleUpdate({ full_name: newName });
+    setEditingName(false);
+  };
+// Cập nhật sdt 
+ const handleUpdatePhone = async () => {
+    if (!newPhone.trim()) {
+      alert("Vui lòng nhập số điện thoại mới!");
+      return;
+    }
+   const payload = { phone_number: newPhone };
+   handleUpdate(payload);
+   setActiveTab("profile");
   };
 
-  const uploadAvatar = async (file: File) => {
-    const formData = new FormData();
-    formData.append("avatar", file);
+// Call api UpdatePassword
+  const handleUpdatePassword = async () => {
+    if (!oldPassword || !newPassword || !confirmPassword) {
+      alert("Vui lòng điền đầy đủ thông tin!");
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      alert("Mật khẩu mới và xác nhận mật khẩu không trùng khớp!");
+      return;
+    }
 
     try {
-      const res = await fetch(`${API_BASE_URL}/api/v1/user/avatar`, {
-        method: "POST",
-        headers: { Authorization: `Bearer ${token}` },
-        body: formData,
-      });
+      setLoading(true);
+      
+      await updatePassword(7, oldPassword, newPassword, confirmPassword, token);
 
-      if (!res.ok) throw new Error(await res.text());
-      console.log("Upload thành công");
+      alert("Cập nhật mật khẩu thành công!");
+      setActiveTab("profile");
 
-      await fetchUserData(); // Refresh lại dữ liệu mới
-    } catch (err) {
-      console.error("Upload error:", err);
+      setOldPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+    } catch (err: any) {
+      alert(err.message);
+    } finally {
+      setLoading(false);
     }
   };
 
+  
   if (loading) return <div>Đang tải...</div>;
   if (!userData) return <div>Không có dữ liệu user</div>;
 
@@ -116,9 +176,7 @@ const AccountManagement = () => {
                   )}
                 </div>
                 <div className="user-details">
-                  <div className="username">
-                    {userData.full_name} 
-                  </div>
+                  <div className="username">{userData.full_name}</div>
                   <div className="user-id">ID: {userData.id}</div>
                   <label
                     className="change-link"
@@ -152,10 +210,26 @@ const AccountManagement = () => {
                   <div className="info-label">
                     <i className="fas fa-user-tag"></i> Tên hiển thị
                   </div>
-                  <div className="info-value">{userData.full_name}</div>
-                  <span className="change-link">
-                    <i className="fas fa-edit"></i> Thay đổi
-                  </span>
+                    {editingName ? (
+                      <input
+                        type="text"
+                        value={newName}
+                        onChange={(e) => setNewName(e.target.value)}
+                        style={{ padding: "5px", borderRadius: "5px", border: "1px solid #ccc" }}
+                      />
+                    ) : (
+                      <div className="info-value">{userData.full_name}</div>
+                    )}
+
+                    {editingName ? (
+                      <span className="change-link" onClick={handleNameUpdate}>
+                        <i className="fas fa-check"></i> Lưu
+                      </span>
+                    ) : (
+                      <span className="change-link" onClick={() => setEditingName(true)}>
+                        <i className="fas fa-edit"></i> Thay đổi
+                      </span>
+                    )}
                 </div>
                 <div className="info-item">
                   <div className="info-label">
@@ -203,6 +277,8 @@ const AccountManagement = () => {
                     type="text"
                     className="form-input"
                     placeholder="Nhập số điện thoại mới"
+                    value={newPhone}
+                    onChange={(e) => setNewPhone(e.target.value)}
                   />
                 </div>
                 <div className="form-row">
@@ -227,8 +303,11 @@ const AccountManagement = () => {
                   >
                     <i className="fas fa-arrow-left"></i> Quay lại
                   </button>
-                  <button className="submit-btn">
-                    <i className="fas fa-save"></i> Cập nhật
+                  <button className="submit-btn"
+                          onClick={handleUpdatePhone}
+                          disabled={loading}
+                  >
+                    <i className="">{loading ? "Đang cập nhật..." : "Cập nhật"}</i>
                   </button>
                 </div>
               </div>
@@ -247,6 +326,8 @@ const AccountManagement = () => {
                     type="password"
                     className="form-input"
                     placeholder="Nhập mật khẩu hiện tại"
+                    value={oldPassword}
+                    onChange={(e) => setOldPassword(e.target.value)}
                   />
                   <a href="#" className="forgot-link">
                     Bạn quên mật khẩu?
@@ -258,6 +339,8 @@ const AccountManagement = () => {
                     type="password"
                     className="form-input"
                     placeholder="Nhập mật khẩu mới"
+                    value={newPassword}
+                    onChange={(e) => setNewPassword(e.target.value)}
                   />
                 </div>
                 <div className="form-group">
@@ -266,6 +349,8 @@ const AccountManagement = () => {
                     type="password"
                     className="form-input"
                     placeholder="Nhập lại mật khẩu mới"
+                    value={confirmPassword}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                 </div>
                 <div className="action-group">
@@ -275,7 +360,10 @@ const AccountManagement = () => {
                   >
                     <i className="fas fa-arrow-left"></i> Quay lại
                   </button>
-                  <button className="submit-btn">
+                  <button className="submit-btn"
+                          onClick={handleUpdatePassword}
+                          disabled={loading}
+                          >
                     <i className="fas fa-save"></i> Cập nhật
                   </button>
                 </div>

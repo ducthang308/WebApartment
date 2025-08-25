@@ -19,6 +19,10 @@ public class Listing {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "ward_id")
+    private Ward ward;
+
+    @ManyToOne
     @JoinColumn(name = "users_id")
     private User user;
 
@@ -56,13 +60,8 @@ public class Listing {
     @OneToMany(mappedBy = "listing")
     private List<ListingMedia> mediaList;
 
-    @ManyToMany
-    @JoinTable(
-            name = "listing_feature",
-            joinColumns = @JoinColumn(name = "listing_id"),
-            inverseJoinColumns = @JoinColumn(name = "feature_id")
-    )
-    private List<Feature> features;
+    @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ListingFeature> listingFeatures;
 
     @OneToMany(mappedBy = "listing")
     private List<FavoriteListings> favoritedByUsers;

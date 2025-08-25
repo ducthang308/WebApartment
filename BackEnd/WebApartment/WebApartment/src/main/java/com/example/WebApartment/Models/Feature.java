@@ -20,7 +20,7 @@ public class Feature {
     @Column(name = "feature_name", nullable = false)
     private String featureName;
 
-    @ManyToMany(mappedBy = "features")
-    private List<Listing> listings;
+    @OneToMany(mappedBy = "feature", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ListingFeature> listingFeatures;
 }
 

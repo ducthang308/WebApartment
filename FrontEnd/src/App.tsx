@@ -12,6 +12,7 @@ import History from './pages/HistoryPay/history.tsx';
 import Home from './pages/Home/Home.tsx';
 import TopUpPage from './pages/TopUpPages/TopUpPage.tsx';
 import AccountManagement from './pages/AccountManagements/AccountManagement.tsx';
+import { Navigate } from "react-router-dom";
 
 import './Global.css'
 
@@ -20,9 +21,10 @@ function App() {
     <Router>
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Navigate to="/Home" />} />
+        <Route path="/Home" element={<Home/>} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/history" element={<History />} />
+        <Route path="/register" element={<History />} />
         <Route path="/recharge/:method" element={<TopUpPage />} />
         <Route path="/AccountManagement" element={<AccountManagement />} />
       </Routes>
