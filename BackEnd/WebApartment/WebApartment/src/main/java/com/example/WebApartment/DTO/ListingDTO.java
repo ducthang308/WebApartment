@@ -12,11 +12,11 @@ import java.util.Date;
 @AllArgsConstructor
 @Builder
 public class ListingDTO {
+    @JsonProperty("id")
+    private Long id;
+
     @JsonProperty("users_id")
     private Long usersId;
-
-    @JsonProperty("ward_id")
-    private Long wardId;
 
     @JsonProperty("category_id")
     private Long categoryId;

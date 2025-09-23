@@ -1,5 +1,6 @@
 package com.example.WebApartment.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -42,6 +43,7 @@ public class Listing {
     private String description;
 
     @Column(name = "posted_date")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSX")
     private Date postedDate;
 
     @Column(name = "status")

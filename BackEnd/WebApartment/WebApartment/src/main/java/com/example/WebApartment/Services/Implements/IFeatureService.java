@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface IFeatureService {
     Feature createFeature(FeatureDTO featureDTO) throws DataNotFoundException;
-    List<Feature> getAllFeature();
+    List<FeatureDTO> getAllFeature();
     Feature updateFeature(Long id, FeatureDTO featureDTO) throws DataNotFoundException;
     void deleteFeature(Long id);
 

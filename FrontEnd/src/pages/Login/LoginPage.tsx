@@ -17,6 +17,8 @@ const LoginPage = () => {
 
             if (data?.token) {
                 localStorage.setItem('token', data.token);
+                localStorage.setItem("userId", data.id.toString());
+                localStorage.setItem('phone', data.phone_number);
             }
 
             navigate('/'); // đường dẫn viết thường

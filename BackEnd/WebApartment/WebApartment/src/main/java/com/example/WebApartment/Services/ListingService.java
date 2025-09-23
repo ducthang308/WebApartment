@@ -10,6 +10,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
+
 import java.util.stream.Collectors;
 
 @Service
@@ -25,20 +27,19 @@ public class ListingService implements IListingService {
     @Override
     public Listing createListing(ListingDTO listingDTO) throws Exception {
         Long categoryId = listingDTO.getCategoryId();
-        Long wardId = listingDTO.getWardId();
         Long userId = listingDTO.getUsersId();
 
-        // Validate and fetch related entities
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find category with id: " + categoryId));
-
-        Ward ward = wardRepository.findById(wardId)
-                .orElseThrow(() -> new DataNotFoundException("Cannot find ward with id: " + wardId));
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new DataNotFoundException("Cannot find user with id: " + userId));
 
-        // Build Listing entity
+        System.out.println("usersId=" + listingDTO.getUsersId());
+        System.out.println("categoryId=" + listingDTO.getCategoryId());
+
+        Date postedDate = listingDTO.getPostedDate() != null ? listingDTO.getPostedDate() : new Date();
+
         Listing listing = Listing.builder()
                 .fullAddress(listingDTO.getFullAddress())
                 .price(listingDTO.getPrice())
@@ -47,12 +48,15 @@ public class ListingService implements IListingService {
                 .postedDate(listingDTO.getPostedDate())
                 .status(listingDTO.getStatus())
                 .contact(listingDTO.getContact())
+                .description(listingDTO.getDescription())
                 .formOfPayment(listingDTO.getFormOfPayment())
                 .category(category)
                 .user(user)
                 .build();
+
         return listingRepository.save(listing);
     }
+
 
 
     @Override
@@ -69,8 +73,8 @@ public class ListingService implements IListingService {
         List<Listing> listings = listingRepository.searchListing(categoryId, keyword);
 
         return listings.stream().map(listing -> ListingDTO.builder()
+                        .id(listing.getId())
                         .usersId(listing.getUser() != null ? listing.getUser().getId() : null)
-
                         .categoryId(listing.getCategory() != null ? listing.getCategory().getId() : null)
                         .fullAddress(listing.getFullAddress())
                         .price(listing.getPrice())

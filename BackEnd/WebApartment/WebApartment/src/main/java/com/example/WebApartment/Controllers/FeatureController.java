@@ -37,9 +37,8 @@ public class FeatureController {
 
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<List<Feature>> getAllFeatures(){
-        List<Feature> getAll = featureService.getAllFeature();
-        return ResponseEntity.ok(getAll);
+    public ResponseEntity<List<FeatureDTO>> getAllFeatures(){
+        return ResponseEntity.ok(featureService.getAllFeature());
     }
 
     @PutMapping("/{id}")

@@ -1,13 +1,12 @@
 import axios from 'axios';
 
 const axiosClient = axios.create({
-    baseURL: 'http://localhost:8081',
+    baseURL: 'http://localhost:8082',
     headers: {
         'Content-Type': 'application/json',
     },
 });
 
-// Thêm interceptor để tự động gắn token vào mọi request
 axiosClient.interceptors.request.use((config) => {
     const token = localStorage.getItem('token');
     config.headers = config.headers ?? {};
@@ -16,6 +15,7 @@ axiosClient.interceptors.request.use((config) => {
     }
     return config;
 });
+
 
 
 export default axiosClient;

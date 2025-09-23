@@ -1,5 +1,6 @@
 package com.example.WebApartment.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -21,6 +22,8 @@ public class Feature {
     private String featureName;
 
     @ManyToMany(mappedBy = "features")
+    @JsonIgnore
     private List<Listing> listings;
+
 }
 

@@ -1,5 +1,6 @@
 package com.example.WebApartment.Services;
 
+import com.example.WebApartment.DTO.CategoryDTO;
 import com.example.WebApartment.DTO.FeatureDTO;
 import com.example.WebApartment.Exceptions.DataNotFoundException;
 import com.example.WebApartment.Models.Feature;
@@ -26,8 +27,11 @@ public class FeatureService  implements IFeatureService {
     }
 
     @Override
-    public List<Feature> getAllFeature(){
-        return featureRepository.findAll();
+    public List<FeatureDTO> getAllFeature(){
+        return featureRepository.findAll()
+                .stream()
+                .map(feat -> new FeatureDTO(feat.getId(), feat.getFeatureName()))
+                .toList();
     }
 
     @Override

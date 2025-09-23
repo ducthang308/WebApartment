@@ -18,11 +18,28 @@ import type { IDistrict } from '../../../services/Interface';
 import { GetDistrict } from '../../../services/DistrictService';
 import type { IWard } from '../../../services/Interface';
 import { GetWard } from '../../../services/WardService';
+import type { IFeature } from '../../../services/Interface';
+import { GetFeature } from '../../../services/FeatureService';
+import type { IListing } from '../../../services/Interface';
+import { PostListing } from '../../../services/ListingService';
+import type { IListingFeatureDTO } from '../../../services/Interface';
+import { PostListingFeature } from '../../../services/ListingFeatureService';
+import { data } from 'react-router-dom';
+
 
 interface UploadedImage {
     id: string;
     file: File;
     url: string;
+}
+interface IdataState {
+    categories: ICategory[];
+    provinces: IProvince[];
+    districts: IDistrict[];
+    wards: IWard[];
+    features: IFeature[];
+    listings: IListing[];
+    listingFeatures: IListingFeatureDTO[];
 }
 
 const { Option } = Select;
@@ -39,16 +56,37 @@ const Listing = () => {
     const [video, setVideo] = useState<{ file: File; url: string } | null>(null);
     const [isUploadingVideo, setIsUploadingVideo] = useState(false);
 
-    const [categories, setCategories] = useState<ICategory[]>([]);
-    const [provinces, setProvinces] = useState<IProvince[]>([]);
-    const [districts, setDistricts] = useState<IDistrict[]>([]);
-    const [wards, setWards] = useState<IWard[]>([]);
+    const [selectedFeatures, setSelectedFeatures] = useState<number[]>([]);
+
+    const [dataState, setDataState] = useState<IdataState>({
+        categories: [],
+        provinces: [],
+        districts: [],
+        wards: [],
+        features: [],
+        listings: [],
+        listingFeatures: [],
+    });
+
+    const [form, setForm] = useState({
+        categoryId: null as number | null,
+        fullAddress: "",
+        title: "",
+        description: "",
+        area: 0,
+        price: 0,
+        paymentMethod: "",
+        status: "",
+        features: [] as number[]
+    });
+
+
 
     const fetchCategories = async () => {
         try {
             const data = await GetCategory();
             console.log("Categories API:", data);
-            setCategories(data);
+            setDataState(prev => ({ ...prev, categories: data }));
         } catch (err) {
             console.error("Lỗi khi load category:", err);
         }
@@ -58,7 +96,7 @@ const Listing = () => {
         try {
             const data = await GetProvince();
             console.log("Provinces API:", data);
-            setProvinces(data);
+            setDataState(prev => ({ ...prev, provinces: data }));
         } catch (err) {
             console.error("Lỗi khi load Province:", err);
         }
@@ -68,7 +106,7 @@ const Listing = () => {
         try {
             const data = await GetDistrict();
             console.log("Districts API:", data);
-            setDistricts(data);
+            setDataState(prev => ({ ...prev, districts: data }));
         } catch (err) {
             console.error("Lỗi khi load Districts:", err);
         }
@@ -78,17 +116,73 @@ const Listing = () => {
         try {
             const data = await GetWard();
             console.log("Wards API:", data);
-            setWards(data);
+            setDataState(prev => ({ ...prev, wards: data }));
         } catch (err) {
             console.error("Lỗi khi load Wards:", err);
         }
     };
+
+    const fetchFeatures = async () => {
+        try {
+            const data = await GetFeature();
+            console.log("Features API:", data);
+            setDataState(prev => ({ ...prev, features: data }));
+        } catch (err) {
+            console.error("Lỗi khi load Features:", err);
+        }
+    };
+
+    const handleSubmit = async () => {
+        try {
+            const userId = Number(localStorage.getItem("userId"));
+            const contact = localStorage.getItem("phone") || "";
+
+            if (!userId || !contact) {
+                alert("Không tìm thấy thông tin người dùng, vui lòng đăng nhập lại!");
+                return;
+            }
+
+            const newListing = await PostListing({
+                users_id: userId,
+                category_id: form.categoryId ?? 0,
+                full_address: form.fullAddress,
+                price: form.price,
+                area_m2: form.area,
+                title: form.title,
+                description: form.description,
+                posted_date: new Date().toISOString(),
+                status: form.status,
+                contact: contact,
+                form_of_payment: form.paymentMethod,
+            });
+
+            console.log("📌 Listing sau khi insert:", newListing);
+
+            if (form.features && form.features.length > 0) {
+                for (const featureId of form.features) {
+                    await PostListingFeature({
+                        listing_id: newListing.id,
+                        feature_id: featureId,
+                    });
+                }
+            }
+
+            alert("✅ Đăng tin thành công!");
+        } catch (err) {
+            console.error("❌ Lỗi khi đăng tin:", err);
+            alert("Có lỗi khi đăng tin, vui lòng thử lại");
+        }
+    };
+
+
+
 
     useEffect(() => {
         fetchCategories();
         fetchProvinces();
         fetchDistricts();
         fetchWards();
+        fetchFeatures();
     }, []);
 
 
@@ -167,10 +261,14 @@ const Listing = () => {
                         style={{ width: '50%' }}
                         size="large"
                         allowClear
-                        options={categories.map(c => ({
+                        options={dataState.categories.map(c => ({
                             value: c.id,
                             label: c.category_name
                         }))}
+                        value={form.categoryId || undefined}
+                        onChange={(value) =>
+                            setForm((prev) => ({ ...prev, categoryId: value }))
+                        }
                     />
                 </div>
             </div>
@@ -189,7 +287,7 @@ const Listing = () => {
                                 placeholder="-- Chọn tỉnh/thành phố --"
                                 size="large"
                                 allowClear
-                                options={provinces.map(p => ({
+                                options={dataState.provinces.map(p => ({
                                     value: p.id,
                                     label: p.provinceName
                                 }))}
@@ -205,20 +303,10 @@ const Listing = () => {
                                 placeholder="-- Chọn phường/xã --"
                                 size="large"
                                 allowClear
-                                options={wards?.map(w => ({
+                                options={dataState.wards?.map(w => ({
                                     value: w.id,
                                     label: w.wardName
                                 })) || []}
-                            />
-                        </div>
-
-                        <div className="form-group-listing">
-                            <label className="label" htmlFor="category">
-                                Số nhà
-                            </label>
-                            <Input
-                                className='input-height'
-                                placeholder="Nhập số nhà"
                             />
                         </div>
                     </div>
@@ -233,7 +321,7 @@ const Listing = () => {
                                 placeholder="-- Chọn loại chuyên mục --"
                                 size="large"
                                 allowClear
-                                options={districts?.map(d => ({
+                                options={dataState.districts?.map(d => ({
                                     value: d.id,
                                     label: d.districtName
                                 })) || []}
@@ -242,31 +330,19 @@ const Listing = () => {
 
                         <div className="form-group-listing">
                             <label className="label" htmlFor="category">
-                                Đường/Phố
-                            </label>
-                            <Select
-                                className="select-listing"
-                                placeholder="-- Chọn loại chuyên mục --"
-                                size="large"
-                                allowClear
-                            >
-                                <Option value="nha-dat">Nhà đất</Option>
-                                <Option value="can-ho">Căn hộ</Option>
-                                <Option value="van-phong">Văn phòng</Option>
-                            </Select>
-                        </div>
-
-
-                        <div className="form-group-listing">
-                            <label className="label" htmlFor="category">
                                 Địa chỉ cụ thể
                             </label>
                             <Input
-                                placeholder="Địa chỉ"
-                                className='input-height'
-                                value=""
-                                readOnly
-                                style={{ backgroundColor: '#f5f5f5' }}
+                                type="text"
+                                className="input-height"
+                                id="address"
+                                name="address"
+                                placeholder="Nhập địa chỉ"
+                                required
+                                value={form.fullAddress}
+                                onChange={(e) =>
+                                    setForm((prev) => ({ ...prev, fullAddress: e.target.value }))
+                                }
                             />
                         </div>
                     </div>
@@ -281,76 +357,114 @@ const Listing = () => {
             <div className="detail-listing">
                 <div className="title-listing">Thông tin mô tả</div>
                 <div className="form-group-listing">
-                    <label className="label" htmlFor="category">
+                    <label className="label" htmlFor="title">
                         Tiêu đề <span className="required">(*)</span>
                     </label>
-                    <TextArea rows={2} />
+                    <TextArea
+                        id="title"
+                        rows={2}
+                        value={form.title}
+                        onChange={(e) =>
+                            setForm((prev) => ({ ...prev, title: e.target.value }))
+                        }
+                    />
                 </div>
                 <div className="form-group-listing gap">
-                    <label className="label" htmlFor="category">
+                    <label className="label" htmlFor="description">
                         Nội dung mô tả <span className="required">(*)</span>
                     </label>
-                    <TextArea rows={10} />
+                    <TextArea
+                        id="description"
+                        rows={10}
+                        value={form.description}
+                        onChange={(e) =>
+                            setForm((prev) => ({ ...prev, description: e.target.value }))
+                        }
+                    />
                 </div>
                 <div className="form-group-listing gap">
-                    <label className="label" htmlFor="category">
+                    <label className="label" htmlFor="price">
                         Giá cho thuê <span className="required">(*)</span>
                     </label>
                     <Input
-                        className='input-height input-width'
+                        id="price"
+                        className="input-height input-width"
                         placeholder="Nhập giá thuê"
+                        type="number"
+                        value={form.price || ""}
+                        onChange={(e) =>
+                            setForm((prev) => ({ ...prev, price: Number(e.target.value) }))
+                        }
                     />
-                    <span className='listing-span'>Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000</span>
+                    <span className="listing-span">
+                        Nhập đầy đủ số, ví dụ 1 triệu thì nhập là 1000000
+                    </span>
                 </div>
+
                 <div className="form-group-listing gap">
-                    <label className="label" htmlFor="category">
+                    <label className="label" htmlFor="paymentMethod">
+                        Phương thức thanh toán <span className="required">(*)</span>
+                    </label>
+                    <Input
+                        id="paymentMethod"
+                        className="input-height input-width"
+                        placeholder="Nhập phương thức thanh toán"
+                        value={form.paymentMethod}
+                        onChange={(e) =>
+                            setForm((prev) => ({ ...prev, paymentMethod: e.target.value }))
+                        }
+                    />
+                </div>
+
+                <div className="form-group-listing gap">
+                    <label className="label" htmlFor="area">
                         Diện tích <span className="required">(*)</span>
                     </label>
                     <Input
-                        className='input-height input-width'
+                        id="area"
+                        className="input-height input-width"
                         placeholder="Nhập diện tích"
+                        type="number"
+                        value={form.area || ""}
+                        onChange={(e) =>
+                            setForm((prev) => ({ ...prev, area: Number(e.target.value) }))
+                        }
                     />
-                    <span className='listing-span'>Đơn vị tính: m<sup>2</sup></span>
+                    <span className="listing-span">
+                        Đơn vị tính: m<sup>2</sup>
+                    </span>
+                </div>
+                <div className="form-group-listing gap">
+                    <label className="label" htmlFor="area">
+                        Trạng thái <span className="required">(*)</span>
+                    </label>
+                    <Input
+                        id="area"
+                        className="input-height input-width"
+                        placeholder="Nhập tình trạng phòng"
+                        type="text"
+                        value={form.status || ""}
+                        onChange={(e) =>
+                            setForm((prev) => ({ ...prev, status: e.target.value }))
+                        }
+                    />
+                    <span className="listing-span">
+                        Trống sẵn hoặc ngày trống
+                    </span>
                 </div>
             </div>
 
             <div className="features-listing">
                 <div className="title-listing">Điểm nổi bật</div>
-                <Checkbox.Group style={{ width: '100%' }}>
-                    <Row>
-                        <Col span={8}>
-                            <Checkbox value="A">Đầy đủ nội thất</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="B">Có máy lạnh</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="C">Có thang máy</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="D">Có bảo vệ 24/24</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Có máy giặt</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Không chung chủ</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Có hầm để xe</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Có kệ bếp</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Có tủ lạnh</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Giờ giấc tự do</Checkbox>
-                        </Col>
-                        <Col span={8}>
-                            <Checkbox value="E">Có ban công</Checkbox>
-                        </Col>
+                <Checkbox.Group
+                    style={{ width: '100%' }}
+                    value={selectedFeatures}
+                    onChange={(values) => setSelectedFeatures(values as number[])} >
+
+                    <Row gutter={[16, 16]}> {dataState.features.map((f) =>
+                    (<Col span={8} key={f.id}>
+                        <Checkbox value={f.id}>{f.feature_name}</Checkbox>
+                    </Col>))}
                     </Row>
                 </Checkbox.Group>
             </div>
@@ -457,6 +571,7 @@ const Listing = () => {
                     icon={<ArrowRightOutlined />}
                     iconPosition="end"
                     block
+                    onClick={handleSubmit}
                 >
                     Tiếp tục
                 </Button>

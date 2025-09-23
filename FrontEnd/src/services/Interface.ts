@@ -54,3 +54,45 @@ export interface IWard {
     wardName: string;
     district: IDistrict;
 }
+
+export interface IFeature {
+    id: number;
+    feature_name: string;
+}
+
+export interface IListing {
+    id: number;
+    user: IUser;
+    category: ICategory;
+    fullAddress: string;
+    price: number;
+    areaM2: number;
+    title: string;
+    description: string;
+    postedDate: Date;
+    status: string;
+    contact: string;
+    formOfPayment: string;
+}
+
+
+export interface IListingRequest {
+    users_id: number;
+    category_id: number;
+    full_address: string;
+    price: number;
+    area_m2: number;
+    title: string;
+    description: string;
+    posted_date: string;
+    status: string;
+    contact: string;
+    form_of_payment: string;
+}
+
+
+export interface IListingFeatureDTO {
+    listing_id: number;
+    feature_id: number;
+}
+

@@ -38,16 +38,20 @@ public class ListingController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<Listing> createListing(@RequestBody @Valid ListingDTO listingDTO) {
+    public ResponseEntity<?> createListing(@RequestBody @Valid ListingDTO listingDTO) {
         try {
             Listing createdListing = listingService.createListing(listingDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(createdListing);
         } catch (DataNotFoundException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
+            // Trả JSON error thay vì null
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(Map.of("error", "Internal server error", "details", e.getMessage()));
         }
     }
+
 
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")
