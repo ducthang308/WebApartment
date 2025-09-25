@@ -55,4 +55,11 @@ public class WardController {
         wardService.deleteWard(id);
         return ResponseEntity.ok("Delete successfully");
     }
+
+    @GetMapping("/{districtId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Ward>> getWardsByDistrict(@PathVariable Long districtId) {
+        List<Ward> wards = wardService.getWardsByDistrict(districtId);
+        return ResponseEntity.ok(wards);
+    }
 }

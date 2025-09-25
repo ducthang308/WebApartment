@@ -11,4 +11,5 @@ public interface IWardService {
     List<Ward> getAllWards();
     Ward updateWard(Long id, WardDTO wardDTO) throws DataNotFoundException;
     void deleteWard(Long id);
+    List<Ward> getWardsByDistrict(Long id);
 }

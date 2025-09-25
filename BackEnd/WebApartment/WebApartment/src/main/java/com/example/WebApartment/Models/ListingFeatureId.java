@@ -1,6 +1,5 @@
 package com.example.WebApartment.Models;
 
-
 import jakarta.persistence.Embeddable;
 import lombok.*;
 

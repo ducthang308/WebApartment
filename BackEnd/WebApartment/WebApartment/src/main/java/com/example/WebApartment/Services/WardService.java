@@ -19,6 +19,11 @@ public class WardService implements IWardService {
     private final DistrictRepository districtRepository;
 
     @Override
+    public List<Ward> getWardsByDistrict(Long districtId) {
+        return wardRepository.findByDistrictId(districtId);
+    }
+
+    @Override
     public Ward createWard(WardDTO wardDTO) throws DataNotFoundException {
         District existingDistrict = districtRepository.findById(wardDTO.getDistrictId())
                 .orElseThrow(()->new DataNotFoundException("Id not found"));
@@ -52,4 +57,5 @@ public class WardService implements IWardService {
     public void deleteWard(Long id) {
         wardRepository.deleteById(id);
     }
+
 }
