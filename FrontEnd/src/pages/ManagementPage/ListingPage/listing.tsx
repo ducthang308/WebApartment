@@ -132,6 +132,24 @@ const Listing = () => {
         }
     };
 
+    const handleFeatureChange = (featureId: number) => {
+        setForm((prev) => {
+            if (prev.features.includes(featureId)) {
+                // Bỏ chọn (xóa khỏi mảng)
+                return {
+                    ...prev,
+                    features: prev.features.filter((id) => id !== featureId),
+                };
+            } else {
+                // Tick chọn (thêm vào mảng)
+                return {
+                    ...prev,
+                    features: [...prev.features, featureId],
+                };
+            }
+        });
+    };
+
     const handleSubmit = async () => {
         try {
             const userId = Number(localStorage.getItem("userId"));
@@ -143,6 +161,7 @@ const Listing = () => {
             }
 
             const newListing = await PostListing({
+                id: 0,
                 users_id: userId,
                 category_id: form.categoryId ?? 0,
                 full_address: form.fullAddress,
@@ -156,16 +175,28 @@ const Listing = () => {
                 form_of_payment: form.paymentMethod,
             });
 
-            console.log("📌 Listing sau khi insert:", newListing);
+            console.log("📌 Full response:", newListing);
+            console.log("📌 typeof:", typeof newListing);
+            console.log("📌 ID:", newListing.id);
+
+            console.log("📌 features:", form.features.length);
+            console.log("📌 features1:", form.features);
+
 
             if (form.features && form.features.length > 0) {
                 for (const featureId of form.features) {
+                    console.log("👉 Will post feature with:", {
+                        listing_id: newListing.id,
+                        feature_id: featureId,
+                    });
+
                     await PostListingFeature({
                         listing_id: newListing.id,
                         feature_id: featureId,
                     });
                 }
             }
+
 
             alert("✅ Đăng tin thành công!");
         } catch (err) {
@@ -457,14 +488,21 @@ const Listing = () => {
             <div className="features-listing">
                 <div className="title-listing">Điểm nổi bật</div>
                 <Checkbox.Group
-                    style={{ width: '100%' }}
-                    value={selectedFeatures}
-                    onChange={(values) => setSelectedFeatures(values as number[])} >
-
-                    <Row gutter={[16, 16]}> {dataState.features.map((f) =>
-                    (<Col span={8} key={f.id}>
-                        <Checkbox value={f.id}>{f.feature_name}</Checkbox>
-                    </Col>))}
+                    style={{ width: "100%" }}
+                    value={form.features}
+                    onChange={(values) =>
+                        setForm((prev) => ({
+                            ...prev,
+                            features: values as number[],
+                        }))
+                    }
+                >
+                    <Row gutter={[16, 16]}>
+                        {dataState.features.map((f) => (
+                            <Col span={8} key={f.id}>
+                                <Checkbox value={f.id}>{f.feature_name}</Checkbox>
+                            </Col>
+                        ))}
                     </Row>
                 </Checkbox.Group>
             </div>

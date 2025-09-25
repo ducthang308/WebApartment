@@ -41,17 +41,35 @@ public class ListingController {
     public ResponseEntity<?> createListing(@RequestBody @Valid ListingDTO listingDTO) {
         try {
             Listing createdListing = listingService.createListing(listingDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdListing);
+
+            // Convert Entity -> DTO để trả về FE
+            ListingDTO response = ListingDTO.builder()
+                    .id(createdListing.getId())
+                    .usersId(createdListing.getUser() != null ? createdListing.getUser().getId() : null)
+                    .categoryId(createdListing.getCategory() != null ? createdListing.getCategory().getId() : null)
+                    .fullAddress(createdListing.getFullAddress())
+                    .price(createdListing.getPrice())
+                    .areaM2(createdListing.getAreaM2())
+                    .title(createdListing.getTitle())
+                    .description(createdListing.getDescription())
+                    .postedDate(createdListing.getPostedDate())
+                    .status(createdListing.getStatus())
+                    .contact(createdListing.getContact())
+                    .formOfPayment(createdListing.getFormOfPayment())
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.CREATED).body(response);
         } catch (DataNotFoundException e) {
-            // Trả JSON error thay vì null
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Internal server error", "details", e.getMessage()));
+                    .body(Map.of(
+                            "error", "Internal server error",
+                            "details", e.getMessage()
+                    ));
         }
     }
-
 
     @GetMapping("")
     @PreAuthorize("hasRole('ADMIN')")

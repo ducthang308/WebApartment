@@ -64,19 +64,35 @@ export interface IListing {
     id: number;
     user: IUser;
     category: ICategory;
-    fullAddress: string;
+    full_address: string;
     price: number;
-    areaM2: number;
+    area_m2: number;
     title: string;
     description: string;
-    postedDate: Date;
+    posted_date: string;
     status: string;
     contact: string;
-    formOfPayment: string;
+    form_of_payment: string;
 }
 
 
 export interface IListingRequest {
+    id: number;
+    users_id: number;
+    category_id: number;
+    full_address: string;
+    price: number;
+    area_m2: number;
+    title: string;
+    description: string;
+    posted_date: string;
+    status: string;
+    contact: string;
+    form_of_payment: string;
+}
+
+export interface IListingResponse {
+    id: number;
     users_id: number;
     category_id: number;
     full_address: string;

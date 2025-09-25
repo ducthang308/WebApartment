@@ -25,11 +25,17 @@ public class ListingFeatureService implements IListingFeatureService {
     @Override
     public ListingFeatureDTO createListingFeature(ListingFeatureDTO dto) {
         Listing listing = listingRepository.findById(dto.getListingId())
-                .orElseThrow(() -> new RuntimeException("Listing not found"));
+                .orElseThrow(() -> new RuntimeException("Listing not found: " + dto.getListingId()));
         Feature feature = featureRepository.findById(dto.getFeatureId())
-                .orElseThrow(() -> new RuntimeException("Feature not found"));
+                .orElseThrow(() -> new RuntimeException("Feature not found: " + dto.getFeatureId()));
 
         ListingFeatureId id = new ListingFeatureId(dto.getListingId(), dto.getFeatureId());
+
+        // Kiểm tra trùng trước khi save
+        if (listingFeatureRepository.existsById(id)) {
+            throw new RuntimeException("ListingFeature already exists for "
+                    + dto.getListingId() + " - " + dto.getFeatureId());
+        }
 
         ListingFeature entity = new ListingFeature();
         entity.setId(id);
@@ -37,9 +43,11 @@ public class ListingFeatureService implements IListingFeatureService {
         entity.setFeature(feature);
 
         ListingFeature saved = listingFeatureRepository.save(entity);
+        System.out.println("Inserted ListingFeature: " + saved.getId().getListingId() + " - " + saved.getId().getFeatureId());
 
         return new ListingFeatureDTO(saved.getId().getListingId(), saved.getId().getFeatureId());
     }
+
 
     @Override
     public ListingFeatureDTO getListingFeatureById(ListingFeatureId id) {
