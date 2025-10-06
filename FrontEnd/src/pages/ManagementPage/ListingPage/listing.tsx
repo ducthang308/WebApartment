@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useNavigate } from "react-router-dom";
 import "./listing.css";
 import { Select, Input } from 'antd';
 import L from 'leaflet';
@@ -24,6 +25,8 @@ import type { IListing } from '../../../services/Interface';
 import { PostListing } from '../../../services/ListingService';
 import type { IListingFeatureDTO } from '../../../services/Interface';
 import { PostListingFeature } from '../../../services/ListingFeatureService';
+import type { IListingMediaDTO } from '../../../services/Interface';
+import { UploadListingMedia } from '../../../services/ListingMediaService';
 import { data } from 'react-router-dom';
 
 
@@ -40,11 +43,13 @@ interface IdataState {
     features: IFeature[];
     listings: IListing[];
     listingFeatures: IListingFeatureDTO[];
+    listingMedia: IListingMediaDTO[];
 }
 
 const { Option } = Select;
 
 const Listing = () => {
+    const navigate = useNavigate();
     const mapRef = useRef<HTMLDivElement | null>(null);
     const mapInstanceRef = useRef<L.Map | null>(null);
 
@@ -66,7 +71,15 @@ const Listing = () => {
         features: [],
         listings: [],
         listingFeatures: [],
+        listingMedia: [],
     });
+
+    type UploadedImage = {
+        id: string;
+        url: string;
+        type: "image" | "video";
+        file: File;
+    };
 
     const [form, setForm] = useState({
         categoryId: null as number | null,
@@ -77,7 +90,8 @@ const Listing = () => {
         price: 0,
         paymentMethod: "",
         status: "",
-        features: [] as number[]
+        features: [] as number[],
+        media: [] as IListingMediaDTO[],
     });
 
 
@@ -132,24 +146,6 @@ const Listing = () => {
         }
     };
 
-    const handleFeatureChange = (featureId: number) => {
-        setForm((prev) => {
-            if (prev.features.includes(featureId)) {
-                // Bỏ chọn (xóa khỏi mảng)
-                return {
-                    ...prev,
-                    features: prev.features.filter((id) => id !== featureId),
-                };
-            } else {
-                // Tick chọn (thêm vào mảng)
-                return {
-                    ...prev,
-                    features: [...prev.features, featureId],
-                };
-            }
-        });
-    };
-
     const handleSubmit = async () => {
         try {
             const userId = Number(localStorage.getItem("userId"));
@@ -175,38 +171,42 @@ const Listing = () => {
                 form_of_payment: form.paymentMethod,
             });
 
-            console.log("📌 Full response:", newListing);
-            console.log("📌 typeof:", typeof newListing);
-            console.log("📌 ID:", newListing.id);
-
-            console.log("📌 features:", form.features.length);
-            console.log("📌 features1:", form.features);
-
-
             if (form.features && form.features.length > 0) {
                 for (const featureId of form.features) {
-                    console.log("👉 Will post feature with:", {
-                        listing_id: newListing.id,
-                        feature_id: featureId,
-                    });
-
                     await PostListingFeature({
                         listing_id: newListing.id,
                         feature_id: featureId,
                     });
                 }
             }
+            if (images.length > 0) {
+                setIsUploading(true);
+                const files = images.map((img) => img.file);
 
+                const uploaded: IListingMediaDTO[] = await UploadListingMedia(
+                    newListing.id,
+                    files
+                );
+
+                // cập nhật media thật từ backend
+                setForm((prev) => ({
+                    ...prev,
+                    media: uploaded,
+                }));
+
+                setIsUploading(false);
+            }
 
             alert("✅ Đăng tin thành công!");
+            setTimeout(() => {
+                navigate("/history");
+                window.scrollTo(0, 0);
+            }, 1000);
         } catch (err) {
             console.error("❌ Lỗi khi đăng tin:", err);
             alert("Có lỗi khi đăng tin, vui lòng thử lại");
         }
     };
-
-
-
 
     useEffect(() => {
         fetchCategories();
@@ -216,40 +216,23 @@ const Listing = () => {
         fetchFeatures();
     }, []);
 
+    const handleSelectMedia = (
+        e: React.ChangeEvent<HTMLInputElement>,
+        type: "image" | "video"
+    ) => {
+        if (!e.target.files) return;
 
-    const handleSelectVideo = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const file = e.target.files?.[0];
-        if (!file) return;
+        const files = Array.from(e.target.files);
 
-        // Giới hạn dung lượng nếu cần
-        if (file.size > 50 * 1024 * 1024) { // 50MB
-            alert("Video quá lớn. Vui lòng chọn video dưới 50MB.");
-            return;
-        }
-
-        const url = URL.createObjectURL(file);
-        setVideo({ file, url });
-        setIsUploadingVideo(false);
-    };
-
-
-
-    const handleSelectImages = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const files = Array.from(e.target.files || []);
-        const fileURLs: UploadedImage[] = files.map((file) => ({
-            id: Math.random().toString(36).substr(2, 9),
-            file,
+        // tạo preview
+        const previews: UploadedImage[] = files.map((file) => ({
+            id: Math.random().toString(),
             url: URL.createObjectURL(file),
+            type,
+            file,
         }));
 
-        // ✅ Giới hạn 20 ảnh
-        if (images.length + fileURLs.length > 20) {
-            alert("Bạn chỉ được tải tối đa 20 ảnh!");
-            return;
-        }
-
-        setImages((prev) => [...prev, ...fileURLs]);
-        setIsUploading(false);
+        setImages((prev) => [...prev, ...previews]);
     };
 
     const handleRemove = (id: string) => {
@@ -514,15 +497,17 @@ const Listing = () => {
                 <div className="browse_photos" onClick={() => fileInputRef.current?.click()}>
                     <div className="upload-image">
                         <img className="icon-upload-image" src={Image} alt="upload icon" />
-                        <span className="upload-text">{isUploading ? 'Đang đăng hình...' : 'Tải ảnh từ thiết bị'}</span>
+                        <span className="upload-text">
+                            {isUploading ? "Đang đăng hình..." : "Tải ảnh từ thiết bị"}
+                        </span>
                     </div>
                     <input
                         type="file"
                         ref={fileInputRef}
-                        onChange={handleSelectImages}
+                        onChange={(e) => handleSelectMedia(e, "image")}
                         multiple
                         accept="image/*"
-                        style={{ display: 'none' }}
+                        style={{ display: "none" }}
                     />
                 </div>
 
@@ -534,42 +519,18 @@ const Listing = () => {
                     <span className="listing-span">• Không chèn văn bản, số điện thoại lên ảnh</span>
                 </div>
 
-                {/* Danh sách ảnh đã chọn */}
                 <div className="image-grid">
-                    {images.map((img) => (
-                        <div key={img.id} className="image-card">
+                    {images.map((img, index) => (
+                        <div key={index} className="image-card">
                             <img src={img.url} alt="preview" />
-                            <button onClick={() => handleRemove(img.id)} className="delete-btn">🗑️ Xóa</button>
+                            <button onClick={() =>
+                                setImages((prev) => prev.filter((_, i) => i !== index))
+                            }>
+                                🗑️ Xóa
+                            </button>
                         </div>
                     ))}
                 </div>
-            </div>
-
-            <div className="video-listing">
-                <div className="title-listing">Video</div>
-
-                <div className="browse_photos" onClick={() => videoInputRef.current?.click()}>
-                    <div className="upload-image">
-                        <img className="icon-upload-image" src={Video} alt="upload icon" />
-                        <span className="upload-text">
-                            {isUploadingVideo ? "Đang đăng video..." : video ? "Thay đổi video" : "Tải video từ thiết bị"}
-                        </span>
-                    </div>
-                    <input
-                        type="file"
-                        ref={videoInputRef}
-                        onChange={handleSelectVideo}
-                        accept="video/*"
-                        style={{ display: "none" }}
-                    />
-                </div>
-
-                {video && (
-                    <div className="video-preview">
-                        <video controls width="100%" src={video.url} />
-                        <button onClick={() => setVideo(null)} className="delete-btn">🗑️ Xóa video</button>
-                    </div>
-                )}
             </div>
 
             <div className="contact-listing">

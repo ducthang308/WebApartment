@@ -112,3 +112,17 @@ export interface IListingFeatureDTO {
     feature_id: number;
 }
 
+export interface IListingMediaDTO {
+    listing_id: number;
+    type: string;
+    url: string;
+    thumbnail_url: string;
+    order_index: string;
+}
+
+export interface UploadedImage {
+    id: string;
+    url: string;
+    type: "image" | "video";
+    file: File;
+}
