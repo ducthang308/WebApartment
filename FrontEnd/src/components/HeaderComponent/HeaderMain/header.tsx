@@ -1,4 +1,5 @@
 import React from 'react'
+import { useState, useEffect } from 'react';
 import Logo from "../../../assets/img/logo.png"
 
 import "./header.css"
@@ -46,8 +47,22 @@ const items: TabsProps['items'] = [
 ];
 
 
-const header = () => {
+const Header = () => {
+    const [name, setName] = useState(localStorage.getItem("name") || "");
     const navigative = useNavigate();
+
+    useEffect(() => {
+        const handleStorageChange = () => {
+            setName(localStorage.getItem("name") || "");
+        };
+
+        window.addEventListener("storageChange", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("storageChange", handleStorageChange);
+        };
+    }, []);
+
     return (
         <div className="header">
             <div className="navbar-top">
@@ -81,14 +96,23 @@ const header = () => {
                             <i className="fa-solid fa-heart"></i>
                             <p className="list-user-item-text">Tin đã thích</p>
                         </li>
-                        <li className="list-user-item" onClick={() => navigative('/history')} >
-                            <i className="fa-solid fa-user-plus"></i>
-                            <p className="list-user-item-text">Đăng ký</p>
-                        </li>
-                        <li className="list-user-item" onClick={() => navigative('/login')} style={{ cursor: 'pointer' }}>
-                            <i className="fa-solid fa-right-to-bracket"></i>
-                            <p className="list-user-item-text">Đăng nhập</p>
-                        </li>
+                        {name ? (
+                            <li className="list-user-item">
+                                <i className="fa-solid fa-user"></i>
+                                <p className="list-user-item-text">{name}</p>
+                            </li>
+                        ) : (
+                            <>
+                                <li className="list-user-item" onClick={() => navigative('/history')}>
+                                    <i className="fa-solid fa-user-plus"></i>
+                                    <p className="list-user-item-text">Đăng ký</p>
+                                </li>
+                                <li className="list-user-item" onClick={() => navigative('/login')} style={{ cursor: 'pointer' }}>
+                                    <i className="fa-solid fa-right-to-bracket"></i>
+                                    <p className="list-user-item-text">Đăng nhập</p>
+                                </li>
+                            </>
+                        )}
                         <li className="list-user-item list-user-item-button" onClick={() => navigative('/AddListing')} style={{ cursor: 'pointer' }}>
                             <i className="fa-solid fa-pen-to-square"></i>
                             <p className="list-user-item-text">Đăng tin</p>
@@ -134,4 +158,4 @@ const header = () => {
     )
 }
 
-export default header
+export default Header;

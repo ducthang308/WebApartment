@@ -1,9 +1,11 @@
 package com.example.WebApartment.Configurations;
 
+//C:\Program Files\Eclipse Adoptium\jdk-21.0.8.9-hotspot\
 
 import com.example.WebApartment.JWT.JwtFilter;
 import com.example.WebApartment.Services.OAuth2.CustomOAuth2UserService;
 import lombok.RequiredArgsConstructor;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +19,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
